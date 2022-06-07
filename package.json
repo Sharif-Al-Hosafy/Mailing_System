@@ -32,7 +32,7 @@
     "build-electron": "electron-builder",
     "build": "yarn build-react && yarn build-electron",
     "serv": "nodemon ./backend/server.js",
-    "start": "concurrently \"cross-env BROWSER=none yarn start-react\" \"wait-on http://localhost:3000 && electron .\""
+    "start": "concurrently \"cross-env yarn start-react\" \"wait-on http://localhost:3000 && electron .\""
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -1,53 +1,33 @@
 import React from 'react'
-import logo from '../logo.png'
+import { LinkContainer } from 'react-router-bootstrap'
+import { Navbar, Nav, Container } from 'react-bootstrap'
 
 const Header = () => {
   return (
-    <nav className='navbar navbar-expand-lg navbar-dark bg-primary'>
-      <div className='container-fluid'>
-        <a className='navbar-brand' href='#'>
-          Mail
-        </a>
-        <button
-          className='navbar-toggler'
-          type='button'
-          data-bs-toggle='collapse'
-          data-bs-target='#navbarColor01'
-          aria-controls='navbarColor01'
-          aria-expanded='false'
-          aria-label='Toggle navigation'
-        >
-          <span className='navbar-toggler-icon'></span>
-        </button>
-
-        <div className='collapse navbar-collapse' id='navbarColor01'>
-          <ul className='navbar-nav me-auto'>
-            <li className='nav-item'>
-              <a className='nav-link active' href='#'>
-                Home
-                <span className='visually-hidden'>(current)</span>
-              </a>
-            </li>
-            <li className='nav-item'>
-              <a className='nav-link' href='#'>
-                Inbox
-              </a>
-            </li>
-            <li className='nav-item'>
-              <a className='nav-link' href='#'>
-                Compose
-              </a>
-            </li>
-            <li className='nav-item'>
-              <a className='nav-link' href='#'>
-                Notifications
-              </a>
-            </li>
-          </ul>
-          <img src={logo} alt='Logo' />
-        </div>
-      </div>
-    </nav>
+    <header>
+      <Navbar className='navbar navbar-expand-lg navbar-dark bg-primary'>
+        <Container className='container-fluid'>
+          <LinkContainer to='/'>
+            <Navbar.Brand className='navbar-brand'>Mail</Navbar.Brand>
+          </LinkContainer>
+          <Navbar.Toggle aria-controls='basic-navbar-nav' />
+          <Navbar.Collapse id='basic-navbar-nav'>
+            <Nav className='ml-auto'>
+              <LinkContainer to='/cart'>
+                <Nav.Link>
+                  <i className='fas fa-shopping-cart'></i> Cart
+                </Nav.Link>
+              </LinkContainer>
+              <LinkContainer to='/login'>
+                <Nav.Link>
+                  <i className='fas fa-user'></i> Sign in
+                </Nav.Link>
+              </LinkContainer>
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </header>
   )
 }
 

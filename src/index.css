@@ -1,11 +1,10 @@
 main {
-  margin: auto;
-  padding: 200px 0;
-}
-body{
-  background-image: url(background.jpg);
-}
 
+}
+.logincard{
+  margin:auto;
+  width: 50%;
+}
 h1 {
   color: rgb(255, 255, 255);
   text-shadow: 2px 2px 4px #000000;
