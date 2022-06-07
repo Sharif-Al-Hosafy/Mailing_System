@@ -1,12 +1,13 @@
 import React from 'react'
 import logo from '../logo.png'
-import { Card, Container } from 'react-bootstrap'
+import { Card, Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const LoginScreen = () => {
   return (
     <div>
       <div>
-        <img className='rounded mx-auto d-block' src={logo}></img>
+        <img className='rounded mx-auto d-block' src={logo} alt='logo'></img>
       </div>
       <div className='my-4'>
         <h1 className='text-center'>منظومة البريد</h1>
@@ -31,9 +32,14 @@ const LoginScreen = () => {
               />
             </div>
             <div className='d-grid gap-2'>
-              <button type='submit' className='btn btn-primary my-3'>
+              <Button
+                as={Link}
+                to='/home'
+                type='submit'
+                className='btn btn-primary my-3'
+              >
                 Login
-              </button>
+              </Button>
             </div>
           </form>
         </Card>
