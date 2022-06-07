@@ -1,12 +1,7 @@
-const router = require('express').Router()
-const db = require('../../config/db') // database connection
+const router = require('express').Router();
+const { login } = require('./user.controller');
+const authMiddleware = require('../../utils/authMiddleware');
 
-router.post('/', async (req, res) => {
-  let queryString = `insert into users (name,password) values('${req.body.username}', '${req.body.password}')`
-  const user = await db.query(queryString).catch((err) => {
-    throw err
-  })
-  res.json(user)
-})
+router.route('/login').post(login);
 
-module.exports = router
+module.exports = router;
