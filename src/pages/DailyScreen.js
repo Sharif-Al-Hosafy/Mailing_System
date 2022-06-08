@@ -1,15 +1,15 @@
 import React from 'react'
-import { Table } from 'react-bootstrap'
-import { useNavigate, Link } from 'react-router-dom'
+import { Button, Table } from 'reactstrap'
+import { useNavigate } from 'react-router-dom'
 
 const DailyScreen = () => {
   let navigate = useNavigate()
 
   return (
     <div>
-      <Link className='btn btn-light my-3' to='/'>
-        Go Back
-      </Link>
+      <Button color='danger' onClick={() => navigate('/home')}>
+        رجوع
+      </Button>
       <h1 className='text-center my-5'>المكاتبات اليومية</h1>
       <div className='container text-center'>
         <Table className='table table-hover'>
@@ -25,6 +25,26 @@ const DailyScreen = () => {
               <th scope='row'>1</th>
               <td>placeholder name</td>
               <td>2:59PM</td>
+            </tr>
+            <tr onClick={() => navigate('/')}>
+              <th scope='row'>2</th>
+              <td>placeholder name</td>
+              <td>12:25PM</td>
+            </tr>
+            <tr onClick={() => navigate('/')}>
+              <th scope='row'>3</th>
+              <td>placeholder name</td>
+              <td>2:52PM</td>
+            </tr>
+            <tr onClick={() => navigate('/')}>
+              <th scope='row'>4</th>
+              <td>placeholder name</td>
+              <td>4:31PM</td>
+            </tr>
+            <tr onClick={() => navigate('/')}>
+              <th scope='row'>5</th>
+              <td>placeholder name</td>
+              <td>1:29PM</td>
             </tr>
           </tbody>
         </Table>

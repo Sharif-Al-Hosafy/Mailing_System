@@ -3,6 +3,7 @@ import './App.css'
 import LoginScreen from './pages/LoginScreen'
 import DailyScreen from './pages/DailyScreen'
 import HomeScreen from './pages/HomeScreen'
+import AddScreen from './pages/AddScreen'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
           <Route path='/' element={<LoginScreen />} exact />
           <Route path='/home' element={<HomeScreen />} exact />
           <Route path='/daily' element={<DailyScreen />} exact />
+          <Route path='/add' element={<AddScreen />} exact />
         </Routes>
       </main>
     </Router>

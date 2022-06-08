@@ -1,48 +1,69 @@
 import React from 'react'
-import { Button, Card, Col, Row } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Card, Col, Row } from 'react-bootstrap'
+import { Button } from 'reactstrap'
+import { useNavigate } from 'react-router-dom'
 import logo from '../logo.png'
+import mail from '../mail.png'
+import bell from '../bell.png'
+import add from '../add.png'
 
 const HomeScreen = () => {
+  let navigate = useNavigate()
   return (
     <div>
       <div>
-        <img className='rounded mx-auto d-block' src={logo} alt='logo'></img>
+        <Button color='danger' onClick={() => navigate('/')} className=''>
+          log out
+        </Button>
+      </div>
+      <div className='d-flex justify-content-between '>
+        <div className='rounded mx-auto d-blocka'>
+          <img className='' src={logo} alt='logo'></img>
+        </div>
       </div>
       <div className='my-4'>
         <h1 className='text-center'>منظومة البريد</h1>
       </div>
-      <div className='container'>
+      <div className='d-flex justify-content-around'>
         <Row className='text-center'>
           <Col>
-            <Card>
+            <Card style={{ width: '14rem' }}>
               <Card.Body>
-                <Card.Title>المكاتبات اليومية</Card.Title>
-                <Card.Text></Card.Text>
-                <Button as={Link} to='/daily' variant='primary'>
-                  Go To Products
+                <Card.Img variant='top' src={add} fluid />
+                <Button
+                  onClick={() => navigate('/add')}
+                  color='primary'
+                  className='my-3'
+                >
+                  إضافة مكاتبة
                 </Button>
               </Card.Body>
             </Card>
           </Col>
           <Col>
-            <Card>
+            <Card style={{ width: '14rem' }}>
               <Card.Body>
-                <Card.Title>Services</Card.Title>
-                <Card.Text>Check out our services.</Card.Text>
-                <Button as={Link} to='/services' variant='primary'>
-                  Go To Services
+                <Card.Img variant='top' src={bell} fluid />
+                <Button
+                  onClick={() => navigate('/home')}
+                  color='primary'
+                  className='my-3'
+                >
+                  الإشعارات
                 </Button>
               </Card.Body>
             </Card>
           </Col>
           <Col>
-            <Card>
+            <Card style={{ width: '14rem' }}>
               <Card.Body>
-                <Card.Title>Custom Requests</Card.Title>
-                <Card.Text>Check out our custom requests.</Card.Text>
-                <Button as={Link} to='/requests' variant='primary'>
-                  Go To Requests
+                <Card.Img src={mail} />
+                <Button
+                  onClick={() => navigate('/daily')}
+                  color='primary'
+                  className='my-3'
+                >
+                  المكاتبات اليومية
                 </Button>
               </Card.Body>
             </Card>
