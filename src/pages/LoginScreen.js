@@ -1,7 +1,7 @@
-import React from 'react'
-import logo from '../logo.png'
-import { Card, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import logo from '../logo.png';
+import { Card, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const LoginScreen = () => {
   return (
@@ -34,7 +34,7 @@ const LoginScreen = () => {
             <div className='d-grid gap-2'>
               <Button
                 as={Link}
-                to='/home'
+                to='/daily'
                 type='submit'
                 className='btn btn-primary my-3'
               >
@@ -45,7 +45,7 @@ const LoginScreen = () => {
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoginScreen
+export default LoginScreen;

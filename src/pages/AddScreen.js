@@ -1,61 +1,34 @@
-import React, { useState } from 'react'
-import { Button } from 'reactstrap'
-import { Form } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
-import { Viewer } from '@react-pdf-viewer/core'
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'
-import '@react-pdf-viewer/core/lib/styles/index.css'
-import '@react-pdf-viewer/default-layout/lib/styles/index.css'
-import { Worker } from '@react-pdf-viewer/core'
+import { Button, Container } from 'reactstrap';
+import { Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+
+import '@react-pdf-viewer/core/lib/styles/index.css';
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 const AddScreen = () => {
-  let navigate = useNavigate()
-  const defaultLayoutPluginInstance = defaultLayoutPlugin()
-
-  // for onchange event
-  const [pdfFile, setPdfFile] = useState(null)
-  const [pdfFileError, setPdfFileError] = useState('')
-
-  // for submit event
-  const [viewPdf, setViewPdf] = useState(null)
-
-  // onchange event
-  const fileType = ['application/pdf']
-  const handlePdfFileChange = (e) => {
-    let selectedFile = e.target.files[0]
-    if (selectedFile) {
-      if (selectedFile && fileType.includes(selectedFile.type)) {
-        let reader = new FileReader()
-        reader.readAsDataURL(selectedFile)
-        reader.onloadend = (e) => {
-          setPdfFile(e.target.result)
-          setPdfFileError('')
-        }
-      } else {
-        setPdfFile(null)
-        setPdfFileError('Please select valid pdf file')
-      }
-    } else {
-      console.log('select your file')
-    }
-  }
-
-  // form submit
-  const handlePdfFileSubmit = (e) => {
-    e.preventDefault()
-    if (pdfFile !== null) {
-      setViewPdf(pdfFile)
-    } else {
-      setViewPdf(null)
-    }
-  }
+  let navigate = useNavigate();
   return (
     <div>
-      <Button color='danger' onClick={() => navigate('/home')}>
+      <Button color='danger' onClick={() => navigate('/daily')}>
         رجوع
       </Button>
       <h1 className='text-center my-5'> إضافة مكاتبة</h1>
-      <div className='container'>
+      <Container>
+        <Form>
+          <Form.Label style={{ textAlign: 'right' }} className='text-right'>
+            كود المكاتبة
+          </Form.Label>
+          <Form.Control type='text' />
+
+          <Form.Label>عدد الصفحات</Form.Label>
+          <Form.Control type='text' />
+
+          <Button color='success' type='submit'>
+            إرسال
+          </Button>
+        </Form>
+      </Container>
+      {/* <div className='container'>
         <br></br>
 
         <form className='form-group' onSubmit={handlePdfFileSubmit}>
@@ -74,7 +47,6 @@ const AddScreen = () => {
         <br></br>
         <h4>View PDF</h4>
         <div className='pdf-container'>
-          {/* show pdf conditionally (if we have one)  */}
           {viewPdf && (
             <>
               <Worker workerUrl='https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js'>
@@ -85,13 +57,11 @@ const AddScreen = () => {
               </Worker>
             </>
           )}
-
-          {/* if we dont have pdf or viewPdf state is null */}
           {!viewPdf && <>No pdf file selected</>}
         </div>
-      </div>
+      </div> */}
     </div>
-  )
-}
+  );
+};
 
-export default AddScreen
+export default AddScreen;
