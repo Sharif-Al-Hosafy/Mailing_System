@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Table } from 'reactstrap';
+import { Button, Table } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 
 const DailyScreen = () => {

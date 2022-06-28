@@ -1,4 +1,4 @@
-import { Button, Container } from 'reactstrap';
+import { Button, Container, Row, Col, Card } from 'reactstrap';
 import { Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,21 +13,46 @@ const AddScreen = () => {
         رجوع
       </Button>
       <h1 className='text-center my-5'> إضافة مكاتبة</h1>
-      <Container>
-        <Form>
-          <Form.Label style={{ textAlign: 'right' }} className='text-right'>
-            كود المكاتبة
-          </Form.Label>
-          <Form.Control type='text' />
-
-          <Form.Label>عدد الصفحات</Form.Label>
-          <Form.Control type='text' />
-
-          <Button color='success' type='submit'>
-            إرسال
-          </Button>
-        </Form>
+      <Container style={{ textAlign: 'center' }}>
+        <Card className='p-3'>
+          <Container>
+            <Row>
+              <Col>
+                <Form.Group>
+                  <Form.Label>عدد الصفحات</Form.Label>
+                  <Form.Control type='number' />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group className='text-right'>
+                  <Form.Label>كود المكاتبة</Form.Label>
+                  <Form.Control className='text-right' type='number' />
+                </Form.Group>
+              </Col>
+              <Form.Group>
+                <Form.Label>اسم المكاتبة</Form.Label>
+                <Form.Control disabled />
+              </Form.Group>
+              <Col className='my-3'>
+                <Button className='w-100' color='info' type='submit'>
+                  بحث
+                </Button>
+              </Col>
+              <Col className='my-3'>
+                <Button
+                  color='success'
+                  className='w-100'
+                  type='submit'
+                  onClick={() => navigate('/daily')}
+                >
+                  حفظ
+                </Button>
+              </Col>
+            </Row>
+          </Container>
+        </Card>
       </Container>
+
       {/* <div className='container'>
         <br></br>
 
