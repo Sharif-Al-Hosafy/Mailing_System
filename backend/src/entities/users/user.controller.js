@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const err = require('../../utils/createError');
-//const db = require('../../config/db'); // database connection
+const db = require('../../config/db'); // database connection
 
 const login = async (req, res, next) => {
   const { username, password } = req.body;
@@ -16,13 +16,24 @@ const login = async (req, res, next) => {
   res.status(200).json({ message: 'success', token });
 };
 
+const getUser = async (req, res) => {
+  let queryString = `select * from users`;
+  const user = await db.query(queryString).catch((err) => {
+    throw err;
+  });
+  res.json(user);
+};
+
+const getdata = async (req, res) => {
+  let queryString = `select orgname,importid,summary,importdate from importdata where importid = 1000 ORDER BY importdate DESC;`;
+  const user = await db.query(queryString).catch((err) => {
+    throw err;
+  });
+  res.json(user);
+};
+
 module.exports = {
   login,
+  getUser,
+  getdata,
 };
-// async (req, res) => {
-//   let queryString = `insert into users (name,password) values('${req.body.username}', '${req.body.password}')`
-//   const user = await db.query(queryString).catch((err) => {
-//     throw err
-//   })
-//   res.json(user)
-// }
