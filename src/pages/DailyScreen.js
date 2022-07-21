@@ -36,7 +36,7 @@ const DailyScreen = () => {
               <td>placeholder name</td>
               <th scope='row'>1</th>
             </tr>
-            <tr onClick={() => navigate('/doc')}>
+            <tr>
               <td>12:25PM</td>
               <td>placeholder name</td>
               <th scope='row'>2</th>
