@@ -1,10 +1,17 @@
-import React from 'react';
-import { Button, Table } from 'reactstrap';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react'
+import { Button, Table } from 'reactstrap'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const DailyScreen = () => {
-  let navigate = useNavigate();
+  let navigate = useNavigate()
+  let cnt = 0
+  const [docs, setDocs] = useState()
 
+  useEffect(async () => {
+    fetch = await axios.get('/api/v1/files/daily/show')
+    setDocs(fetch.data)
+  }, [])
   return (
     <div>
       <div className='d-flex justify-content-between'>
@@ -25,42 +32,26 @@ const DailyScreen = () => {
         <Table className='table table-hover'>
           <thead>
             <tr>
-              <th scope='col'>وقت الارسال</th>
+              <th scope='col'>التاريخ</th>
+              <th scope='col'>الملخص</th>
               <th scope='col'>اسم المكاتبة</th>
               <th scope='col'>م</th>
             </tr>
           </thead>
           <tbody>
-            <tr onClick={() => navigate('/doc')}>
-              <td>2:59PM</td>
-              <td>placeholder name</td>
-              <th scope='row'>1</th>
-            </tr>
-            <tr>
-              <td>12:25PM</td>
-              <td>placeholder name</td>
-              <th scope='row'>2</th>
-            </tr>
-            <tr onClick={() => navigate('/doc')}>
-              <td>2:52PM</td>
-              <td>placeholder name</td>
-              <th scope='row'>3</th>
-            </tr>
-            <tr onClick={() => navigate('/doc')}>
-              <td>4:31PM</td>
-              <td>placeholder name</td>
-              <th scope='row'>4</th>
-            </tr>
-            <tr onClick={() => navigate('/doc')}>
-              <td>1:29PM</td>
-              <td>placeholder name</td>
-              <th scope='row'>5</th>
-            </tr>
+            {docs.map((el) => (
+              <tr onClick={() => navigate('/doc')}>
+                <td>{el.importdate.split('T')[0]}</td>
+                <td style={{ width: '40%' }}>{el.summary}</td>
+                <td style={{ width: '30%' }}>{el.orgname}</td>
+                <th scope='row'>{++cnt}</th>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DailyScreen;
+export default DailyScreen

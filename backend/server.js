@@ -7,15 +7,15 @@ const app = express()
 
 // importing routes
 const usersRoutes = require('./src/entities/users/user.route')
+const filesRoute = require('./src/entities/files/file.route')
 
 // app middlewares
 app.use(express.json())
 app.use(cors())
-// database connection
-const db = require('./src/config/db')
 
 // app routes
 app.use('/api/v1/users', usersRoutes)
+app.use('/api/v1/files', filesRoute)
 
 // error handling
 app.use((req, res, next) => {

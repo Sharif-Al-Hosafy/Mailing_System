@@ -1,23 +1,23 @@
-import { Button, Container, Row, Col, Card, Table } from 'reactstrap';
-import { Form } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import '@react-pdf-viewer/core/lib/styles/index.css';
-import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import { Button, Container, Row, Col, Card, Table } from 'reactstrap'
+import { Form } from 'react-bootstrap'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import '@react-pdf-viewer/core/lib/styles/index.css'
+import '@react-pdf-viewer/default-layout/lib/styles/index.css'
 
 const AddScreen = () => {
-  let navigate = useNavigate();
-  const [docs, setDocs] = useState([]);
-  const [docNum, setDocNum] = useState();
-  useEffect(() => {
-    const fetchDocs = async () => {
-      const { data } = await axios.get('/api/v1/users/data');
-      setDocs(data);
-    };
+  let navigate = useNavigate()
+  let fetch
+  let cnt = 0
+  const [docs, setDocs] = useState([])
+  const [docNum, setDocNum] = useState()
 
-    fetchDocs();
-  }, []);
+  const fetchDocs = async () => {
+    fetch = await axios.get(`/api/v1/files/${docNum}`)
+    setDocs(fetch.data)
+    console.log(docNum)
+  }
 
   return (
     <div>
@@ -38,13 +38,23 @@ const AddScreen = () => {
               <Col>
                 <Form.Group className='text-right'>
                   <Form.Label>وارد</Form.Label>
-                  <Form.Control className='text-right' type='number' />
+                  <Form.Control
+                    className='text-right'
+                    type='number'
+                    value={docNum}
+                    onChange={(e) => setDocNum(e.target.value)}
+                  />
                 </Form.Group>
               </Col>
             </Row>
 
             <div className='my-3'>
-              <Button className='w-50' color='info' type='button'>
+              <Button
+                className='w-50'
+                color='info'
+                type='button'
+                onClick={() => fetchDocs()}
+              >
                 بحث
               </Button>
             </div>
@@ -53,19 +63,21 @@ const AddScreen = () => {
               <Table className='table table-hover'>
                 <thead>
                   <tr>
-                    <th scope='col'>وقت الارسال</th>
+                    <th scope='col'>التاريخ</th>
+                    <th scope='col'>الملخص</th>
                     <th scope='col'>اسم المكاتبة</th>
                     <th scope='col'>م</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {docs.forEach((el) => {
+                  {docs.map((el) => (
                     <tr onClick={() => navigate('/doc')}>
-                      <td>2:59PM</td>
-                      <td>{el.orgname}</td>
-                      <th scope='row'>1</th>
-                    </tr>;
-                  })}
+                      <td>{el.importdate.split('T')[0]}</td>
+                      <td style={{ width: '40%' }}>{el.summary}</td>
+                      <td style={{ width: '30%' }}>{el.orgname}</td>
+                      <th scope='row'>{++cnt}</th>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
               <Button
@@ -114,7 +126,7 @@ const AddScreen = () => {
         </div>
       </div> */}
     </div>
-  );
-};
+  )
+}
 
-export default AddScreen;
+export default AddScreen
