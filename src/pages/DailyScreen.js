@@ -6,12 +6,17 @@ import axios from 'axios'
 const DailyScreen = () => {
   let navigate = useNavigate()
   let cnt = 0
-  const [docs, setDocs] = useState()
+  const [docs, setDocs] = useState([])
 
-  useEffect(async () => {
-    fetch = await axios.get('/api/v1/files/daily/show')
-    setDocs(fetch.data)
+  useEffect(() => {
+    const fetchDocs = async () => {
+      const { data } = await axios.get('/api/v1/files/daily/show')
+      setDocs(data)
+    }
+
+    fetchDocs()
   }, [])
+
   return (
     <div>
       <div className='d-flex justify-content-between'>
@@ -32,7 +37,6 @@ const DailyScreen = () => {
         <Table className='table table-hover'>
           <thead>
             <tr>
-              <th scope='col'>التاريخ</th>
               <th scope='col'>الملخص</th>
               <th scope='col'>اسم المكاتبة</th>
               <th scope='col'>م</th>
@@ -41,10 +45,11 @@ const DailyScreen = () => {
           <tbody>
             {docs.map((el) => (
               <tr onClick={() => navigate('/doc')}>
-                <td>{el.importdate.split('T')[0]}</td>
-                <td style={{ width: '40%' }}>{el.summary}</td>
-                <td style={{ width: '30%' }}>{el.orgname}</td>
-                <th scope='row'>{++cnt}</th>
+                <td style={{ width: '45%' }}>{el.summary}</td>
+                <td style={{ width: '45%' }}>{el.orgname}</td>
+                <th style={{ width: '10%' }} scope='row'>
+                  {++cnt}
+                </th>
               </tr>
             ))}
           </tbody>
