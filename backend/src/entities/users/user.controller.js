@@ -24,6 +24,14 @@ const getUser = async (req, res) => {
   res.json(user)
 }
 
+const getdata = async (req, res) => {
+  let queryString = `select orgname,importid,summary,importdate from importdata where importid = 1000 ORDER BY importdate DESC;`
+  const user = await db.query(queryString).catch((err) => {
+    throw err
+  })
+  res.json(user)
+}
+
 module.exports = {
   login,
   getUser,
