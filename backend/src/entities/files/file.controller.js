@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
 const err = require('../../utils/createError')
-const db = require('../../config/db') // database archieve
+const db = require('../../config/db.mail') // database archieve
 
 const fileList = async (req, res) => {
-  let queryString = `select id,orgname,importid,summary,importdate from importdata where importid = ${req.params.id} ORDER BY importdate DESC;`
+  let queryString = `select id,orgname,importid,summary,importdate from archieve.importdata where importid = ${req.params.id} ORDER BY importdate DESC;`
   const file = await db.query(queryString).catch((err) => {
     throw err
   })
@@ -23,7 +23,7 @@ const fileToDailyScreen = async (req, res) => {
 }
 
 const openFile = async (req, res) => {
-  let queryString = `select file_data from mail_system.file where file.no '${req.params.fileId}';`
+  let queryString = `select file_data from mail_system.file where id=${req.params.fileId};`
   const file = await db.query(queryString).catch((err) => {
     throw err
   })

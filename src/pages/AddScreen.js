@@ -19,9 +19,18 @@ const AddScreen = () => {
     console.log(docNum)
   }
 
+  const addDaily = async (id) => {
+    fetch = await axios.post(`/api/v1/files/daily/save/${id}`)
+  }
+
   return (
     <div>
-      <Button color='danger' onClick={() => navigate('/daily')}>
+      <Button
+        color='danger'
+        onClick={() => {
+          navigate('/daily')
+        }}
+      >
         رجوع
       </Button>
       <h1 className='text-center my-5'> إضافة مكاتبة</h1>
@@ -71,7 +80,13 @@ const AddScreen = () => {
                 </thead>
                 <tbody>
                   {docs.map((el) => (
-                    <tr onClick={() => navigate('/doc')}>
+                    <tr
+                      onClick={() => {
+                        addDaily(el.id)
+                        alert('تم إرسال المكاتبة')
+                        navigate('/daily')
+                      }}
+                    >
                       <td>{el.importdate.split('T')[0]}</td>
                       <td style={{ width: '40%' }}>{el.summary}</td>
                       <td style={{ width: '30%' }}>{el.orgname}</td>
@@ -84,7 +99,7 @@ const AddScreen = () => {
                 color='success'
                 className='w-50'
                 type='submit'
-                onClick={() => navigate('/daily')}
+                onClick={() => navigate('/doc')}
               >
                 حفظ
               </Button>
@@ -92,39 +107,6 @@ const AddScreen = () => {
           </Container>
         </Card>
       </Container>
-
-      {/* <div className='container'>
-        <br></br>
-
-        <form className='form-group' onSubmit={handlePdfFileSubmit}>
-          <input
-            type='file'
-            className='form-control'
-            required
-            onChange={handlePdfFileChange}
-          />
-          {pdfFileError && <div className='error-msg'>{pdfFileError}</div>}
-          <br></br>
-          <button type='submit' className='btn btn-success btn-lg'>
-            UPLOAD
-          </button>
-        </form>
-        <br></br>
-        <h4>View PDF</h4>
-        <div className='pdf-container'>
-          {viewPdf && (
-            <>
-              <Worker workerUrl='https://unpkg.com/pdfjs-dist@2.6.347/build/pdf.worker.min.js'>
-                <Viewer
-                  fileUrl={viewPdf}
-                  plugins={[defaultLayoutPluginInstance]}
-                />
-              </Worker>
-            </>
-          )}
-          {!viewPdf && <>No pdf file selected</>}
-        </div>
-      </div> */}
     </div>
   )
 }
