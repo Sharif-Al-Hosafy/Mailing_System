@@ -1,29 +1,27 @@
-import React, { useState, useEffect } from 'react'
-import { Document, Page } from 'react-pdf'
-import PdfViewerComponent from '../components/PdfViewerComponent'
-import axios from 'axios'
+import React, { useState, useEffect } from "react";
+import { Document, Page } from "react-pdf";
+import PdfViewerComponent from "../components/PdfViewerComponent";
+import axios from "axios";
+import pdff from "../sample.pdf";
 
 const DocScreen = () => {
-  const [pdf, setPdf] = useState()
-  let doc
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  let id;
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
 
-  const getPdf = async () => {
-    const { data } = await axios.get('/api/v1/files/open/1')
-    let file = new Blob([data[0].file_data], { type: 'aplication/pdf' })
-    let fileURL = URL.createObjectURL(file)
-    setPdf(fileURL)
-  }
-  useEffect(() => {
-    getPdf()
-  }, [])
-  if (!pdf) {
-    return <div></div>
-  }
   return (
-    <div className='PDF-viewer'>
-      <PdfViewerComponent blob={pdf} />
+    <div>
+      <object
+        data={pdff}
+        type="application/pdf"
+        width="100%"
+        height="650px"
+      ></object>
     </div>
-  )
-}
+  );
+};
 
-export default DocScreen
+export default DocScreen;
