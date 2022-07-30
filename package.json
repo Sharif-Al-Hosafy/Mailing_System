@@ -14,6 +14,7 @@
   "dependencies": {
     "@react-pdf-viewer/core": "^3.4.0",
     "@react-pdf-viewer/default-layout": "^3.4.0",
+    "base64topdf": "^1.1.8",
     "blob-url-file": "^1.0.0",
     "blob-url-to-file": "^1.0.0",
     "bootswatch": "^5.1.3",

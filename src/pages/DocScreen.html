@@ -687,9 +687,11 @@
               : undefined
           );
           if (index === inst.fabricObjects.length - 1) {
-            let pdf = doc.output("blob");
+            let blob = new Blob([doc.output("blob")], {
+              type: "application/pdf",
+            });
 
-            let url = URL.createObjectURL(pdf);
+            let url = URL.createObjectURL(blob);
             console.log(url);
             // const options = {
             //   method: "POST",
@@ -727,7 +729,7 @@
             };
             axios.post(
               "http://localhost:5000/api/v1/files/savepdf",
-              pdf,
+              blob,
               config
             );
           }

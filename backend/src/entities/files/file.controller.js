@@ -6,6 +6,7 @@ const fs = require("fs");
 const http = require("http").createServer();
 const io = require("socket.io")(http);
 let staticID;
+const base64 = require("base64topdf");
 
 io.on("connection", (socket) => {
   //Socket is a Link to the Client
@@ -90,11 +91,15 @@ const getStaticID = (req, res) => {
 };
 
 const savePdf = async (req, res) => {
+  var bs64;
   req.on("data", (data) => {
-    let blob = Buffer(data);
+    // read binary data
+
+    //let blob = new Buffer(data).toString("base64");
+    bs64 = Buffer.from(data, "binary").toString("base64");
     fs.writeFile(
       "./src/pages/sample.pdf",
-      blob,
+      bs64,
       { encoding: "base64" },
       function (err) {
         if (err) {
@@ -109,26 +114,6 @@ const savePdf = async (req, res) => {
   req.on("end", () => {
     res.send("ok");
   });
-
-  //   io.on('connection', function(socket) {
-  //     socket.on('message', function(data){
-  //         console.log("recieved data:");
-  //         console.log(data);
-
-  //         var bufArr = new ArrayBuffer(4);
-  //         var bufView = new Uint8Array(bufArr);
-  //         bufView[0]=6;
-  //         bufView[1]=7;
-  //         bufView[2]=8;
-  //         bufView[3]=9;
-  //         socket.emit('message',bufArr);
-  //     });
-  // });
-  // const buffer = Buffer.from(req.body.blob, "binary");
-  // let queryString = `insert into archieve.importfile (pdffile) values(${buffer}) where id=${staticID}`;
-  // const files = await db.query(queryString).catch((err) => {
-  //   throw err;
-  // });
 };
 
 module.exports = {
