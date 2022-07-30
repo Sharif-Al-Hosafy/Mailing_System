@@ -52,7 +52,8 @@ const DailyScreen = () => {
               <tr
                 onClick={() => {
                   getData(el.file_no);
-                  navigate(`/doc`);
+
+                  window.open("http://localhost:5000/api/v1/files/editor");
                 }}
               >
                 <td style={{ width: "45%" }}>{el.summary}</td>
