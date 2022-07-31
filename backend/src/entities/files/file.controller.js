@@ -40,6 +40,7 @@ const openFile = async (req, res) => {
     './public/sample.pdf',
     blob,
     { encoding: 'base64' },
+
     function (err) {
       if (err) {
         console.log(err)
@@ -83,13 +84,47 @@ const getStaticID = (req, res) => {
   res.json({ id: staticID })
 }
 
+// const savePdf = async (req, res) => {
+//   var bs64
+//   req.on('data', async (data) => {
+//     bs64 = Buffer.from(data, 'binary').toString('base64')
+
+//     fs.writeFile(
+//       './src/pages/sample2.pdf',
+//       bs64,
+//       { encoding: 'base64' },
+//       function (err) {
+//         if (err) {
+//           console.log(err)
+//         } else {
+//           console.log('file created')
+//         }
+//       }
+//     )
+
+//     var query = ` update mail_system.file SET ? where file_no='${staticID}'`,
+//       values = {
+//         file_data: data,
+//       }
+//     db.query(query, values, function (er, da) {
+//       if (er) throw er
+//     })
+//   })
+
+//   req.on('end', () => {
+//     res.send('ok')
+//   })
+// }
+
 const savePdf = async (req, res) => {
   var bs64
-  req.on('data', async (data) => {
-    bs64 = Buffer.from(data, 'binary').toString('base64')
+  req.on('data', (data) => {
+    // read binary data
 
+    //let blob = new Buffer(data).toString("base64");
+    bs64 = Buffer.from(data, 'binary').toString('base64')
     fs.writeFile(
-      './src/pages/sample2.pdf',
+      './src/pages/sample.pdf',
       bs64,
       { encoding: 'base64' },
       function (err) {
@@ -100,14 +135,6 @@ const savePdf = async (req, res) => {
         }
       }
     )
-
-    var query = ` update mail_system.file SET ? where file_no='${staticID}'`,
-      values = {
-        file_data: data,
-      }
-    db.query(query, values, function (er, da) {
-      if (er) throw er
-    })
   })
 
   req.on('end', () => {

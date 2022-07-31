@@ -11,6 +11,11 @@ const filesRoute = require('./src/entities/files/file.route')
 
 // app middlewares
 app.use(express.json())
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+)
 app.use(cors())
 
 // app routes
