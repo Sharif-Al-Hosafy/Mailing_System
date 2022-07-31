@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const err = require('../../utils/createError')
-const db = require('../../config/db') // database connection
+//const db = require('../../config/db') // database connection
 
 const login = async (req, res, next) => {
   const { username, password } = req.body

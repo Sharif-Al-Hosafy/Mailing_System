@@ -1,63 +1,127 @@
-const jwt = require("jsonwebtoken");
-const err = require("../../utils/createError");
-const db = require("../../config/db.mail"); // database archieve
-const { Buffer } = require("buffer");
-const fs = require("fs");
+const jwt = require('jsonwebtoken')
+const err = require('../../utils/createError')
+const db = require('../../config/db.mail') // database archieve
+const { Buffer } = require('buffer')
+const fs = require('fs')
+let staticID
 
 const fileList = async (req, res) => {
-  let queryString = `select id,orgname,importid,summary,importdate from archieve.importdata where importid = ${req.params.id} ORDER BY importdate DESC;`;
+  let queryString = `select id,orgname,importid,summary,importdate from archieve.importdata where importid = ${req.params.id} ORDER BY importdate DESC;`
   const file = await db.query(queryString).catch((err) => {
-    throw err;
-  });
-  res.status(200).json(file);
-};
+    throw err
+  })
+  res.status(200).json(file)
+}
 
 const fileToDailyScreen = async (req, res) => {
   let queryString = `insert into mail_system.file (file_no, file_data, orgname, summary) 
   select imd.id,imf.pdffile,imd.orgname,imd.summary from archieve.importdata imd
   join archieve.importfile imf 
   on imd.id = imf.id
-  where imd.id = '${req.params.fileId}';`;
+  where imd.id = '${req.params.fileId}';`
   const file = await db.query(queryString).catch((err) => {
-    throw err;
-  });
-  res.status(200).json(file);
-};
+    throw err
+  })
+  res.status(200).json(file)
+}
 
 const openFile = async (req, res) => {
-  let queryString = `select file_data from mail_system.file where file_no='${req.params.fileId}';`;
+  let queryString = `select file_data from mail_system.file where file_no='${req.params.fileId}';`
   const file = await db.query(queryString).catch((err) => {
-    throw err;
-  });
+    throw err
+  })
 
-  let blob = file[0].file_data;
-  let buff = Buffer(blob, "binary").toString("base64");
+  staticID = req.params.fileId
+  let buff = file[0].file_data
+
+  let blob = Buffer.from(buff, 'binary').toString('base64')
+
   fs.writeFile(
-    "./src/sample.pdf",
-    buff,
-    { encoding: "base64" },
+    './public/sample.pdf',
+    blob,
+    { encoding: 'base64' },
     function (err) {
       if (err) {
-        console.log(err);
+        console.log(err)
       } else {
-        console.log("file created");
+        console.log('file created')
       }
     }
-  );
-  return res.status(200).send({ message: "sucess" });
-};
+  )
+  return res.status(200).json({ buff })
+}
 
 const showDailyDocuments = async (req, res) => {
-  let queryString = `select * from mail_system.file`;
+  let queryString = `select * from mail_system.file`
   const files = await db.query(queryString).catch((err) => {
-    throw err;
-  });
-  res.status(200).json(files);
-};
+    throw err
+  })
+  res.status(200).json(files)
+}
+
+const getPdfEditor = (req, res) => {
+  fs.readFile('src/pages/DocScreen.html', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    res.send(data)
+  })
+}
+
+const getPdf = (req, res) => {
+  fs.readFile('public/sample.pdf', (err, data) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    res.send(data)
+  })
+}
+
+const getStaticID = (req, res) => {
+  res.json({ id: staticID })
+}
+
+const savePdf = async (req, res) => {
+  var bs64
+  req.on('data', async (data) => {
+    bs64 = Buffer.from(data, 'binary').toString('base64')
+
+    fs.writeFile(
+      './src/pages/sample2.pdf',
+      bs64,
+      { encoding: 'base64' },
+      function (err) {
+        if (err) {
+          console.log(err)
+        } else {
+          console.log('file created')
+        }
+      }
+    )
+
+    var query = ` update mail_system.file SET ? where file_no='${staticID}'`,
+      values = {
+        file_data: data,
+      }
+    db.query(query, values, function (er, da) {
+      if (er) throw er
+    })
+  })
+
+  req.on('end', () => {
+    res.send('ok')
+  })
+}
 
 module.exports = {
   fileToDailyScreen,
   fileList,
   openFile,
   showDailyDocuments,
-};
+  getPdf,
+  getStaticID,
+  getPdfEditor,
+  savePdf,
+}

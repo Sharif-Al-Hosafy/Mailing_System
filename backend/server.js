@@ -4,8 +4,8 @@ require('express-async-errors')
 const express = require('express')
 const cors = require('cors')
 const app = express()
+const fs = require('fs')
 
-// importing routes
 const usersRoutes = require('./src/entities/users/user.route')
 const filesRoute = require('./src/entities/files/file.route')
 
