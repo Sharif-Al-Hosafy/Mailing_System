@@ -32,6 +32,9 @@ const DailyScreen = () => {
         >
           خروج
         </Button>
+        <Button color="info" onClick={() => navigate("/register")}>
+          تسجيل حساب
+        </Button>
         <Button color="success" onClick={() => navigate("/add")}>
           +
         </Button>
