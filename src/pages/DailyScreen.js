@@ -43,16 +43,23 @@ const DailyScreen = () => {
   }
 
   const submitHandler = (e) => {
-    e.preventDefault()
     console.log(checkedState, selectedFile)
+    let obj = {
+      checkedState,
+      selectedFile,
+    }
+    axios.post('/api/v1/files/send', obj).then((res) => {
+      console.log('sent')
+    })
+    setSelectedFile('')
   }
 
   return (
     <div>
-      <Card className='userInfo'>
+      <div className='userInfo'>
         <h5>{userInfo.department}</h5>
         <h5>{userInfo.name}</h5>
-      </Card>
+      </div>
       <div className='d-flex justify-content-between'>
         <Button
           className='float-right'
