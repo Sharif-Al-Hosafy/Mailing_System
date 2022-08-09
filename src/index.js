@@ -1,15 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import "./bootstrap.min.css";
-import App from "./App";
-import axios from "axios";
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import './bootstrap.min.css'
+import App from './App'
+import axios from 'axios'
+import { Provider } from 'react-redux'
+import store from './store'
 
-axios.defaults.baseURL = "http://localhost:5000/";
+axios.defaults.baseURL = 'localhost:5000'
 
 ReactDOM.render(
-  <div>
+  <Provider store={store}>
     <App />
-  </div>,
-  document.getElementById("root")
-);
+  </Provider>,
+  document.getElementById('root')
+)

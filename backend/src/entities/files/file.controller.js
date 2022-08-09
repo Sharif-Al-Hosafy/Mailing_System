@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const err = require('../../utils/createError')
-const db = require('../../config/db.mail') // database archieve
+//const db = require('../../config/db.mail') // database archieve
 const { Buffer } = require('buffer')
 const fs = require('fs')
 let staticID

@@ -1,9 +1,32 @@
-import React from 'react';
-import logo from '../logo.png';
-import { Card, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import logo from '../logo.png'
+import { Card, Button, Form } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from '../actions/userActions'
+import Message from '../components/Message'
 
 const LoginScreen = () => {
+  const navigate = useNavigate()
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const dispatch = useDispatch()
+  const userLogin = useSelector((state) => state.userLogin)
+  const { error, userInfo } = userLogin
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/daily')
+    }
+  }, [navigate, userInfo])
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    dispatch(login(username, password))
+  }
+
   return (
     <div>
       <div>
@@ -12,40 +35,36 @@ const LoginScreen = () => {
       <div className='my-4'>
         <h1 className='text-center'>منظومة البريد</h1>
       </div>
+      {error ? <Message variant='danger'>{error}</Message> : <></>}
       <div className='logincard'>
         <Card className='p-3'>
-          <form>
-            <div className='form-group'>
-              <input
+          <Form onSubmit={submitHandler}>
+            <Form.Group>
+              <Form.Control
                 type='text'
-                className='form-control'
-                id='username'
                 placeholder='Username'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
               />
-            </div>
-            <div className='form-group py-3'>
-              <input
+            </Form.Group>
+            <Form.Group className='form-group py-3'>
+              <Form.Control
                 type='password'
-                className='form-control'
-                id='password'
                 placeholder='Password'
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-            </div>
+            </Form.Group>
             <div className='d-grid gap-2'>
-              <Button
-                as={Link}
-                to='/daily'
-                type='submit'
-                className='btn btn-primary my-3'
-              >
+              <Button type='submit' className='btn btn-primary my-3'>
                 Login
               </Button>
             </div>
-          </form>
+          </Form>
         </Card>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginScreen;
+export default LoginScreen
