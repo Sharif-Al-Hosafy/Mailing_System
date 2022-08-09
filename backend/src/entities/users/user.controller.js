@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const err = require('../../utils/createError');
-const db = require('../../config/db'); // database connection
+const db = require('../../config/db');
 const bcrypt = require('bcrypt');
 
 const getAllDep = async (req, res) => {
