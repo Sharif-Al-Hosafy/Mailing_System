@@ -23,7 +23,9 @@ const DailyScreen = () => {
 
   useEffect(() => {
     const fetchDocs = async () => {
-      const { data } = await axios.get('/api/v1/files/daily/show')
+      const { data } = await axios.get(
+        `/api/v1/files/daily/show/${userInfo.dep_id}`
+      )
       setDocs(data)
     }
 
