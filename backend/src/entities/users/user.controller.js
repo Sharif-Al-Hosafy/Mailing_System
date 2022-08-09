@@ -3,6 +3,15 @@ const err = require('../../utils/createError');
 const db = require('../../config/db'); // database connection
 const bcrypt = require('bcrypt');
 
+const getAllDep = async (req, res) => {
+  let queryString = `select dep_name from mail_system.departments`;
+  const departments = await db.query(queryString).catch((err) => {
+    throw err;
+  });
+
+  res.status(200).json(departments);
+};
+
 const insertUser = async (req, res) => {
   const { username, password, dep_id } = req.body;
   const salt = await bcrypt.genSaltSync(10);
@@ -14,7 +23,7 @@ const insertUser = async (req, res) => {
   res.status(200).json({ message: 'success' });
 };
 
-const login = async (req, res, next) => {
+const login = async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) throw err(400, 'Username or password not found');
@@ -31,10 +40,22 @@ const login = async (req, res, next) => {
     expiresIn: '30d',
   });
 
-  res.status(200).json({ token });
+  let query = `SELECT mail_system.users.username,mail_system.departments.dep_name 
+                from mail_system.users
+                join mail_system.departments
+                on users.dep_id = departments.id
+                where users.username = "${username}" `;
+  const userData = await db.query(query).catch((err) => {
+    throw err;
+  });
+
+  res
+    .status(200)
+    .json({ token: token, name: username, department: userData[0].dep_name });
 };
 
 module.exports = {
   login,
   insertUser,
+  getAllDep,
 };
