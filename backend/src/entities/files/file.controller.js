@@ -71,7 +71,9 @@ const sendFiles = async (req, res) => {
 };
 
 const showDailyDocuments = async (req, res) => {
-  let queryString = `select * from mail_system.file`;
+  let dep_id = req.params.id;
+  console.log(dep_id);
+  let queryString = `select * from mail_system.file where (select file_id from dep_file where dep_id = ${dep_id});`;
   const files = await db.query(queryString).catch((err) => {
     throw err;
   });

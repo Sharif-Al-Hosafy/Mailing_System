@@ -40,7 +40,7 @@ const login = async (req, res) => {
     expiresIn: '30d',
   });
 
-  let query = `SELECT mail_system.users.username,mail_system.departments.dep_name 
+  let query = `SELECT mail_system.users.username,mail_system.users.dep_id,mail_system.departments.dep_name 
                 from mail_system.users
                 join mail_system.departments
                 on users.dep_id = departments.id
@@ -49,9 +49,12 @@ const login = async (req, res) => {
     throw err;
   });
 
-  res
-    .status(200)
-    .json({ token: token, name: username, department: userData[0].dep_name });
+  res.status(200).json({
+    token: token,
+    name: username,
+    dep_id: userData[0].dep_id,
+    department: userData[0].dep_name,
+  });
 };
 
 module.exports = {
