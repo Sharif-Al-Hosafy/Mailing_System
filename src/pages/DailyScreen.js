@@ -3,7 +3,7 @@ import { Button, Table } from 'reactstrap'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { logout } from '../actions/userActions'
-import { Card } from 'react-bootstrap'
+import { Card, Modal, Form } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 const DailyScreen = () => {
@@ -12,6 +12,11 @@ const DailyScreen = () => {
 
   let cnt = 0
   const [docs, setDocs] = useState([])
+  const [show, setShow] = useState(false)
+  const [checkedState, setCheckedState] = useState(new Array(8).fill(false))
+  const [selectedFile, setSelectedFile] = useState()
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -27,6 +32,19 @@ const DailyScreen = () => {
 
   let getData = async (id) => {
     const data = await axios.get(`/api/v1/files/open/${id}`)
+  }
+
+  const handleOnChange = (position) => {
+    const updatedCheckedState = checkedState.map((perm, index) =>
+      index === position ? !perm : perm
+    )
+
+    setCheckedState(updatedCheckedState)
+  }
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    console.log(checkedState, selectedFile)
   }
 
   return (
@@ -79,11 +97,107 @@ const DailyScreen = () => {
                   userInfo.department === 'نائب المدير العام' ||
                   userInfo.department === 'الأرشيف العام' ||
                   userInfo.department === 'سكرتير المدير العام' ? (
-                    <Button color='success'>ارسال</Button>
+                    <Button
+                      color='success'
+                      onClick={() => {
+                        handleShow()
+                        setSelectedFile(el.file_no)
+                      }}
+                    >
+                      ارسال
+                    </Button>
                   ) : (
                     <></>
                   )}
-
+                  <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                      <Modal.Title style={{ alignItems: 'center' }}>
+                        الأقسام المرسل إليها
+                      </Modal.Title>
+                    </Modal.Header>
+                    <Form onSubmit={submitHandler}>
+                      <div>
+                        <Modal.Body>
+                          <Form.Group>
+                            <div
+                              style={{
+                                float: 'left',
+                                display: '',
+                                paddingLeft: '70px',
+                              }}
+                            >
+                              <Form.Check
+                                type='checkbox'
+                                label='الإدارة القانونية'
+                                checked={checkedState[1]}
+                                onChange={() => handleOnChange(1)}
+                              />
+                              <Form.Check
+                                type='checkbox'
+                                label='التخطيط و المتابعة'
+                                checked={checkedState[2]}
+                                onChange={() => handleOnChange(2)}
+                              />
+                              <Form.Check
+                                type='checkbox'
+                                label='قسم العقود'
+                                checked={checkedState[3]}
+                                onChange={() => handleOnChange(3)}
+                              />
+                              <Form.Check
+                                type='checkbox'
+                                label='الإدارة المالية'
+                                checked={checkedState[4]}
+                                onChange={() => handleOnChange(4)}
+                              />
+                            </div>
+                            <div
+                              style={{
+                                float: 'right',
+                                display: '',
+                                paddingRight: '70px',
+                              }}
+                            >
+                              <Form.Check
+                                type='checkbox'
+                                label='الأرشيف العام'
+                                checked={checkedState[5]}
+                                onChange={() => handleOnChange(5)}
+                              />
+                              <Form.Check
+                                type='checkbox'
+                                label='المدير العام'
+                                checked={checkedState[6]}
+                                onChange={() => handleOnChange(6)}
+                              />
+                              <Form.Check
+                                type='checkbox'
+                                label='نائب المدير العام'
+                                checked={checkedState[7]}
+                                onChange={() => handleOnChange(7)}
+                              />
+                            </div>
+                          </Form.Group>
+                        </Modal.Body>
+                      </div>
+                      <div style={{ float: 'right', padding: '20px' }}>
+                        <Button
+                          color='danger'
+                          style={{ margin: '10px' }}
+                          onClick={handleClose}
+                        >
+                          غلق
+                        </Button>
+                        <Button
+                          type='submit'
+                          color='success'
+                          onClick={handleClose}
+                        >
+                          إرسال
+                        </Button>
+                      </div>
+                    </Form>
+                  </Modal>
                   <Button
                     color='info'
                     onClick={() => {

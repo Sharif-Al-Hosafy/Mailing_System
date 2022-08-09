@@ -28,8 +28,11 @@ app.use(
     parameterLimit: 50000,
   })
 )
-app.use(cors())
-
+app.use(
+  cors({
+    origin: '*',
+  })
+)
 // app routes
 app.use('/api/v1/users', usersRoutes)
 app.use('/api/v1/files', filesRoute)
