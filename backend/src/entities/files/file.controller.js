@@ -18,8 +18,8 @@ const fileToDailyScreen = async (req, res) => {
   select imd.id,imf.pdffile,imd.orgname,imd.summary from archieve.importdata imd
   join archieve.importfile imf 
   on imd.id = imf.id
-  where imd.id = '${req.params.fileId}';`;
-  console.log(req.params.fileId);
+  where imd.id = '${req.params.fileId}';
+  insert into mail_system.dep_file (file_id,dep_id) values ('${req.params.fileId}',8);`;
   const file = await db.query(queryString).catch((err) => {
     throw err;
   });
