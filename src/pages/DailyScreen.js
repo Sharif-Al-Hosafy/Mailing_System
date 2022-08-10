@@ -140,24 +140,48 @@ const DailyScreen = () => {
                                 label='الإدارة القانونية'
                                 checked={checkedState[1]}
                                 onChange={() => handleOnChange(1)}
+                                disabled={
+                                  userInfo.department === 'المدير العام' ||
+                                  userInfo.department === 'نائب المدير العام'
+                                    ? true
+                                    : false
+                                }
                               />
                               <Form.Check
                                 type='checkbox'
                                 label='التخطيط و المتابعة'
                                 checked={checkedState[2]}
                                 onChange={() => handleOnChange(2)}
+                                disabled={
+                                  userInfo.department === 'المدير العام' ||
+                                  userInfo.department === 'نائب المدير العام'
+                                    ? true
+                                    : false
+                                }
                               />
                               <Form.Check
                                 type='checkbox'
                                 label='قسم العقود'
                                 checked={checkedState[3]}
                                 onChange={() => handleOnChange(3)}
+                                disabled={
+                                  userInfo.department === 'المدير العام' ||
+                                  userInfo.department === 'نائب المدير العام'
+                                    ? true
+                                    : false
+                                }
                               />
                               <Form.Check
                                 type='checkbox'
                                 label='الإدارة المالية'
                                 checked={checkedState[4]}
                                 onChange={() => handleOnChange(4)}
+                                disabled={
+                                  userInfo.department === 'المدير العام' ||
+                                  userInfo.department === 'نائب المدير العام'
+                                    ? true
+                                    : false
+                                }
                               />
                             </div>
                             <div
@@ -172,18 +196,49 @@ const DailyScreen = () => {
                                 label='الأرشيف العام'
                                 checked={checkedState[5]}
                                 onChange={() => handleOnChange(5)}
+                                disabled={
+                                  userInfo.department === 'المدير العام' ||
+                                  userInfo.department === 'نائب المدير العام'
+                                    ? true
+                                    : false
+                                }
                               />
                               <Form.Check
                                 type='checkbox'
                                 label='المدير العام'
                                 checked={checkedState[6]}
                                 onChange={() => handleOnChange(6)}
+                                disabled={
+                                  userInfo.department === 'المدير العام' ||
+                                  userInfo.department === 'نائب المدير العام'
+                                    ? true
+                                    : false
+                                }
                               />
                               <Form.Check
                                 type='checkbox'
                                 label='نائب المدير العام'
                                 checked={checkedState[7]}
                                 onChange={() => handleOnChange(7)}
+                                disabled={
+                                  userInfo.department === 'المدير العام' ||
+                                  userInfo.department === 'نائب المدير العام'
+                                    ? true
+                                    : false
+                                }
+                              />
+                              <Form.Check
+                                type='checkbox'
+                                label='سكرتير المدير العام'
+                                checked={checkedState[8]}
+                                onChange={() => handleOnChange(8)}
+                                disabled={
+                                  userInfo.department ===
+                                    'سكرتير المدير العام' ||
+                                  userInfo.department === 'نائب المدير العام'
+                                    ? true
+                                    : false
+                                }
                               />
                             </div>
                           </Form.Group>

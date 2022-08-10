@@ -79,13 +79,6 @@ const RegisterScreen = () => {
                 ))}
               </Form.Select>
             </Form.Group>
-
-            <Form.Group controlId='permissions'>
-              <Form.Label className='my-2'> Permissions</Form.Label>
-              <Form.Check type='checkbox' id='admin' label='admin' />
-              <Form.Check type='checkbox' id='send' label='send' />
-              <Form.Check type='checkbox' id='sign' label='sign' />
-            </Form.Group>
             <Button className='my-3' type='submit' variant='success'>
               Register
             </Button>
