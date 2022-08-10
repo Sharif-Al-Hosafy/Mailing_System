@@ -35,7 +35,7 @@ const login = async (req, res) => {
   if (user.length == 0) throw err(404, 'Username not Found');
   const isMatch = await bcrypt.compare(password, user[0].pass);
 
-  if (!isMatch) throw err(400, 'da5al el pass 3edel ya fashel yabnel 3ars');
+  if (!isMatch) throw err(400, 'Incorrect Password');
   const token = jwt.sign({ username }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });

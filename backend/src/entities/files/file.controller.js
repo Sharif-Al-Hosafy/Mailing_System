@@ -19,6 +19,7 @@ const fileToDailyScreen = async (req, res) => {
   join archieve.importfile imf 
   on imd.id = imf.id
   where imd.id = '${req.params.fileId}';`;
+  console.log(req.params.fileId);
   const file = await db.query(queryString).catch((err) => {
     throw err;
   });
@@ -73,7 +74,7 @@ const sendFiles = async (req, res) => {
 const showDailyDocuments = async (req, res) => {
   let dep_id = req.params.id;
   console.log(dep_id);
-  let queryString = `select * from mail_system.file where (select file_id from dep_file where dep_id = ${dep_id});`;
+  let queryString = ` SELECT f.file_no,f.file_data,f.orgname,f.summary,d.dep_id FROM file f join dep_file d on f.file_no = d.file_id  where d.dep_id = ${dep_id};`;
   const files = await db.query(queryString).catch((err) => {
     throw err;
   });
