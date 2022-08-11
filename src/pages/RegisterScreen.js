@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import FormContainer from '../components/formContainer'
 import { Form, Button, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { register } from '../actions/userActions'
+import { register, logout } from '../actions/userActions'
 import axios from 'axios'
 import Message from '../components/Message'
 
@@ -31,8 +31,15 @@ const RegisterScreen = () => {
 
   const submitHandler = (e) => {
     dispatch(register(username, password, depId))
+    if (error) {
+      alert(error)
+    } else {
+      alert('user registered')
+      dispatch(logout())
+      navigate('/')
+    }
   }
-
+  console.log(depName)
   return (
     <div>
       <Button

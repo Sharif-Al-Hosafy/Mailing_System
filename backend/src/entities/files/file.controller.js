@@ -5,7 +5,7 @@ const { Buffer } = require('buffer')
 const fs = require('fs')
 let staticID
 
-const fileList = async (req, res) => {
+const fileListImp = async (req, res) => {
   let queryString = `select id,orgname,importid,summary,importdate from archieve.importdata where importid = ${req.params.id} ORDER BY importdate DESC;`
   const file = await db.query(queryString).catch((err) => {
     throw err
@@ -13,12 +13,42 @@ const fileList = async (req, res) => {
   res.status(200).json(file)
 }
 
-const fileToDailyScreen = async (req, res) => {
+const fileListExp = async (req, res) => {
+  let queryString = `select id,orgname,exportid,summary,exportdate from archieve.exportdata where exportid = ${req.params.id} ORDER BY exportdate DESC;`
+  const file = await db.query(queryString).catch((err) => {
+    throw err
+  })
+  res.status(200).json(file)
+}
+
+const fileToDailyScreenImp = async (req, res) => {
   let queryString = `insert into mail_system.file (file_no, file_data, orgname, summary) 
   select imd.id,imf.pdffile,imd.orgname,imd.summary from archieve.importdata imd
   join archieve.importfile imf 
   on imd.id = imf.id
   where imd.id = '${req.params.fileId}';`
+
+  let queryString2 = `insert into mail_system.dep_file (file_id,dep_id) values ("${
+    req.params.fileId
+  }",${8});`
+  console.log(req.params.fileId)
+
+  const file = await db.query(queryString).catch((err) => {
+    throw err
+  })
+
+  const file2 = await db.query(queryString2).catch((err) => {
+    throw err
+  })
+  res.status(200).json(file2)
+}
+
+const fileToDailyScreenExp = async (req, res) => {
+  let queryString = `insert into mail_system.file (file_no, file_data, orgname, summary) 
+  select emd.id,emf.pdffile,emd.orgname,emd.summary from archieve.exportdata emd
+  join archieve.exportfile emf 
+  on emd.id = emf.id
+  where emd.id = '${req.params.fileId}';`
 
   let queryString2 = `insert into mail_system.dep_file (file_id,dep_id) values ("${
     req.params.fileId
@@ -122,8 +152,10 @@ const savePdf = async (req, res) => {
 }
 
 module.exports = {
-  fileToDailyScreen,
-  fileList,
+  fileToDailyScreenImp,
+  fileToDailyScreenExp,
+  fileListImp,
+  fileListExp,
   openFile,
   showDailyDocuments,
   getPdf,

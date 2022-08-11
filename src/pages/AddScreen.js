@@ -10,15 +10,17 @@ const AddScreen = () => {
   let cnt = 0
   const [docs, setDocs] = useState([])
   const [docNum, setDocNum] = useState()
+  const [imp, setImp] = useState(true)
 
   const fetchDocs = async () => {
-    fetch = await axios.get(`/api/v1/files/${docNum}`)
+    if (imp) fetch = await axios.get(`/api/v1/files/imp/${docNum}`)
+    else fetch = await axios.get(`/api/v1/files/exp/${docNum}`)
     setDocs(fetch.data)
-    console.log(docNum)
   }
 
   const addDaily = async (id) => {
-    fetch = await axios.post(`/api/v1/files/daily/save/${id}`)
+    if (imp) fetch = await axios.post(`/api/v1/files/daily/save/imp/${id}`)
+    else fetch = await axios.post(`/api/v1/files/daily/save/exp/${id}`)
   }
 
   return (
@@ -35,25 +37,36 @@ const AddScreen = () => {
       <Container style={{ textAlign: 'center' }}>
         <Card className='p-3'>
           <Container>
-            <Row>
-              <Col>
-                <Form.Group>
-                  <Form.Label>صادر</Form.Label>
-                  <Form.Control type='number' />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group className='text-right'>
-                  <Form.Label>وارد</Form.Label>
-                  <Form.Control
-                    className='text-right'
-                    type='number'
-                    value={docNum}
-                    onChange={(e) => setDocNum(e.target.value)}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+            <Form.Group className='text-right'>
+              <Form.Label>رقم المكاتبة</Form.Label>
+              <Form.Control
+                className='text-right'
+                type='number'
+                value={docNum}
+                onChange={(e) => setDocNum(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group className='my-3'>
+              <div key='inline-radio'>
+                <Form.Check
+                  inline
+                  reverse
+                  name='group1'
+                  type='radio'
+                  label='وارد'
+                  checked={imp}
+                  onChange={() => setImp(!imp)}
+                />
+                <Form.Check
+                  inline
+                  name='group1'
+                  type='radio'
+                  label='صادر'
+                  checked={!imp}
+                  onChange={() => setImp(!imp)}
+                />
+              </div>
+            </Form.Group>
 
             <div className='my-3'>
               <Button

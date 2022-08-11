@@ -5,13 +5,14 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from '../actions/userActions'
 import Message from '../components/Message'
+import axios from 'axios'
 
 const LoginScreen = () => {
   const navigate = useNavigate()
 
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState('admin')
   const [password, setPassword] = useState('')
-
+  const [users, setUsers] = useState([])
   const dispatch = useDispatch()
   const userLogin = useSelector((state) => state.userLogin)
   const { error, userInfo } = userLogin
@@ -20,13 +21,18 @@ const LoginScreen = () => {
     if (userInfo) {
       navigate('/daily')
     }
+    const fetchUsers = async () => {
+      const { data } = await axios.get('/api/v1/users/users')
+      setUsers(data)
+    }
+
+    fetchUsers()
   }, [navigate, userInfo])
 
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(login(username, password))
   }
-
   return (
     <div>
       <div>
@@ -40,12 +46,15 @@ const LoginScreen = () => {
         <Card className='p-3'>
           <Form onSubmit={submitHandler}>
             <Form.Group>
-              <Form.Control
-                type='text'
-                placeholder='Username'
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
+              <Form.Select
+                onChange={(e) => {
+                  setUsername(e.target.value)
+                }}
+              >
+                {users.map((user) => (
+                  <option value={user.username}>{user.username}</option>
+                ))}
+              </Form.Select>
             </Form.Group>
             <Form.Group className='form-group py-3'>
               <Form.Control

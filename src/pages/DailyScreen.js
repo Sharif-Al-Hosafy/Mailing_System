@@ -3,7 +3,7 @@ import { Button, Table } from 'reactstrap'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { logout } from '../actions/userActions'
-import { Card, Modal, Form } from 'react-bootstrap'
+import { Modal, Form } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 const DailyScreen = () => {
@@ -64,14 +64,18 @@ const DailyScreen = () => {
       </div>
       <div className='d-flex justify-content-between'>
         <Button
-          className='float-right'
+          className='float-right m-3'
           color='danger'
           onClick={() => dispatch(logout())}
         >
           خروج
         </Button>
         {userInfo.department === 'admin' ? (
-          <Button color='info' onClick={() => navigate('/register')}>
+          <Button
+            className='m-3'
+            color='info'
+            onClick={() => navigate('/register')}
+          >
             تسجيل حساب
           </Button>
         ) : (
@@ -79,7 +83,11 @@ const DailyScreen = () => {
         )}
 
         {userInfo.department === 'الأرشيف العام' ? (
-          <Button color='success' onClick={() => navigate('/add')}>
+          <Button
+            className='m-3'
+            color='success'
+            onClick={() => navigate('/add')}
+          >
             +
           </Button>
         ) : (
@@ -272,7 +280,7 @@ const DailyScreen = () => {
                     عرض
                   </Button>
                   {userInfo.department === 'المدير العام' ||
-                  userInfo.department === ' نائب المدير العام' ? (
+                  userInfo.department === 'نائب المدير العام' ? (
                     <Button
                       color='warning'
                       onClick={() => {
