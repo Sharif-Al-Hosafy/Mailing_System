@@ -1,33 +1,94 @@
 import React from 'react'
-import { LinkContainer } from 'react-router-bootstrap'
-import { Navbar, Nav, Container } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faFileCirclePlus,
+  faArrowRightFromBracket,
+  faUserPlus,
+  faHouse,
+} from '@fortawesome/free-solid-svg-icons'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { logout } from '../actions/userActions'
 
 const Header = () => {
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+  let navigate = useNavigate()
+  let dispatch = useDispatch()
   return (
-    <header>
-      <Navbar className='navbar navbar-expand-lg navbar-dark bg-primary'>
-        <Container className='container-fluid'>
-          <LinkContainer to='/'>
-            <Navbar.Brand className='navbar-brand'>Mail</Navbar.Brand>
-          </LinkContainer>
-          <Navbar.Toggle aria-controls='basic-navbar-nav' />
-          <Navbar.Collapse id='basic-navbar-nav'>
-            <Nav className='ml-auto'>
-              <LinkContainer to='/cart'>
-                <Nav.Link>
-                  <i className='fas fa-shopping-cart'></i> Cart
-                </Nav.Link>
-              </LinkContainer>
-              <LinkContainer to='/login'>
-                <Nav.Link>
-                  <i className='fas fa-user'></i> Sign in
-                </Nav.Link>
-              </LinkContainer>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </header>
+    <div>
+      <nav class='navbar navbar-expand-lg navbar-light bg-light '>
+        <div class='container-fluid'>
+          <button
+            class='navbar-toggler'
+            type='button'
+            data-bs-toggle='collapse'
+            data-bs-target='#navbarColor03'
+            aria-controls='navbarColor03'
+            aria-expanded='false'
+            aria-label='Toggle navigation'
+          >
+            <span class='navbar-toggler-icon'></span>
+          </button>
+          {userInfo ? (
+            <div>
+              <span onClick={() => dispatch(logout())}>
+                <FontAwesomeIcon
+                  className='mx-3 clickable'
+                  color='red'
+                  icon={faArrowRightFromBracket}
+                />
+              </span>
+              <span onClick={() => navigate('/')}>
+                <FontAwesomeIcon
+                  className='mx-3 clickable'
+                  color='#282c34'
+                  icon={faHouse}
+                />
+              </span>
+              {userInfo.department === 'admin' ? (
+                <span onClick={() => navigate('/register')}>
+                  <FontAwesomeIcon
+                    className='mx-3 clickable'
+                    color='skyblue'
+                    icon={faUserPlus}
+                  />
+                </span>
+              ) : (
+                <></>
+              )}
+
+              {userInfo.department === 'الأرشيف العام' ? (
+                <span onClick={() => navigate('/add')}>
+                  <FontAwesomeIcon
+                    className='mx-3 clickable'
+                    color='green'
+                    icon={faFileCirclePlus}
+                  />
+                </span>
+              ) : (
+                <></>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
+
+          <div class='collapse navbar-collapse' id='navbarColor03'>
+            <ul class='navbar-nav ms-auto'>
+              <div className='mx-3'>
+                {userInfo ? (
+                  <h5>{userInfo.department + ' / ' + userInfo.name}</h5>
+                ) : (
+                  <></>
+                )}
+              </div>
+            </ul>
+            <div class='d-flex'></div>
+          </div>
+        </div>
+      </nav>
+    </div>
   )
 }
 

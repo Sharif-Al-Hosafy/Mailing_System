@@ -15,7 +15,7 @@ const DocViewerScreen = () => {
       >
         رجوع
       </Button>
-      <object data={pdf} type='application/pdf' width='100%' height='550px'>
+      <object data={pdf} type='application/pdf' width='100%' height='580px'>
         <a href={pdf}></a>
       </object>
     </div>

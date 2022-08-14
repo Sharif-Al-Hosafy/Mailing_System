@@ -26,6 +26,7 @@ const AddScreen = () => {
   return (
     <div>
       <Button
+        className='buttonZoom m-3'
         color='danger'
         onClick={() => {
           navigate('/daily')
@@ -92,6 +93,7 @@ const AddScreen = () => {
                 <tbody>
                   {docs.map((el) => (
                     <tr
+                      className='docTable'
                       onClick={() => {
                         addDaily(el.id)
                         alert('تم إرسال المكاتبة')

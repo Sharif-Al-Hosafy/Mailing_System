@@ -35,15 +35,19 @@ const LoginScreen = () => {
   }
   return (
     <div>
-      <div>
-        <img className='rounded mx-auto d-block' src={logo} alt='logo'></img>
-      </div>
-      <div className='my-4'>
-        <h1 className='text-center'>منظومة البريد</h1>
-      </div>
       {error ? <Message variant='danger'>{error}</Message> : <></>}
       <div className='logincard'>
-        <Card className='p-3'>
+        <Card className='p-3 mt-5'>
+          <div>
+            <img
+              className='rounded mx-auto d-block'
+              src={logo}
+              alt='logo'
+            ></img>
+          </div>
+          <div className='my-4'>
+            <h1 className='text-center'>منظومة البريد</h1>
+          </div>
           <Form onSubmit={submitHandler}>
             <Form.Group>
               <Form.Select

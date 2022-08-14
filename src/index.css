@@ -1,13 +1,11 @@
-main {
 
-}
 .logincard{
   margin:auto;
   width: 50%;
 }
 h1 {
-  color: rgb(255, 255, 255);
-  text-shadow: 2px 2px 4px #000000;
+  color: rgb(24, 75, 95);
+ 
 }
 
 nav{
@@ -15,7 +13,24 @@ nav{
 }
 
 body{
-  background-image: url("background3.jpg");
-  background-repeat: no-repeat;
-  background-size: cover;
+  background-color: rgb(24, 75, 95) !important;
+}
+
+.docTable{
+  color: 'white';
+  text-shadow: '2px 2px 4px #000000';
+  transition: transform .2s;
+}
+
+.docTable:hover{
+  transform: scale(1.05)
+}
+
+.buttonZoom{
+  transition: transform .2s;
+}
+
+.buttonZoom:hover{
+  transform: scale(1.25);
+  color: white;
 }

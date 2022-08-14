@@ -7,10 +7,15 @@ import AddScreen from './pages/AddScreen'
 import RegisterScreen from './pages/RegisterScreen'
 import DocViewerScreen from './pages/DocViewerScreen'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Header from './components/Header'
+import { useSelector } from 'react-redux'
 
 function App() {
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
   return (
     <Router>
+      {userInfo ? <Header /> : <></>}
       <main>
         <Routes>
           <Route path='/' element={<LoginScreen />} />
