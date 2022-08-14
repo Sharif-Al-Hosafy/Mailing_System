@@ -35,7 +35,6 @@ const LoginScreen = () => {
   }
   return (
     <div>
-      {error ? <Message variant='danger'>{error}</Message> : <></>}
       <div className='logincard'>
         <Card className='p-3 mt-5'>
           <div>
@@ -48,6 +47,13 @@ const LoginScreen = () => {
           <div className='my-4'>
             <h1 className='text-center'>منظومة البريد</h1>
           </div>
+          {error ? (
+            <Message className='text-center' variant='danger'>
+              {error}
+            </Message>
+          ) : (
+            <></>
+          )}
           <Form onSubmit={submitHandler}>
             <Form.Group>
               <Form.Select

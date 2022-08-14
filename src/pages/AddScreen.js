@@ -100,7 +100,11 @@ const AddScreen = () => {
                         navigate('/daily')
                       }}
                     >
-                      <td>{el.importdate.split('T')[0]}</td>
+                      <td>
+                        {imp
+                          ? el.importdate.split('T')[0]
+                          : el.exportdate.split('T')[0]}
+                      </td>
                       <td style={{ width: '40%' }}>{el.summary}</td>
                       <td style={{ width: '30%' }}>{el.orgname}</td>
                       <th scope='row'>{++cnt}</th>
