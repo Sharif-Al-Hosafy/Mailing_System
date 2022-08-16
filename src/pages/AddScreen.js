@@ -1,4 +1,4 @@
-import { Button, Container, Row, Col, Card, Table } from 'reactstrap'
+import { Button, Container, Card, Table } from 'reactstrap'
 import { Form } from 'react-bootstrap'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -25,16 +25,7 @@ const AddScreen = () => {
 
   return (
     <div>
-      <Button
-        className='buttonZoom m-3'
-        color='danger'
-        onClick={() => {
-          navigate('/daily')
-        }}
-      >
-        رجوع
-      </Button>
-      <h1 className='text-center my-5'> إضافة مكاتبة</h1>
+      <h1 className='text-center my-5 title'> إضافة مكاتبة</h1>
       <Container style={{ textAlign: 'center' }}>
         <Card className='p-3'>
           <Container>

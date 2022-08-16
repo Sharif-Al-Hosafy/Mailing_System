@@ -17,10 +17,10 @@ const Header = () => {
   let dispatch = useDispatch()
   return (
     <div>
-      <nav class='navbar navbar-expand-lg navbar-light bg-light '>
-        <div class='container-fluid'>
+      <nav className='navbar navbar-expand-lg navbar-light bg-light '>
+        <div className='container-fluid'>
           <button
-            class='navbar-toggler'
+            className='navbar-toggler'
             type='button'
             data-bs-toggle='collapse'
             data-bs-target='#navbarColor03'
@@ -28,7 +28,7 @@ const Header = () => {
             aria-expanded='false'
             aria-label='Toggle navigation'
           >
-            <span class='navbar-toggler-icon'></span>
+            <span className='navbar-toggler-icon'></span>
           </button>
           {userInfo ? (
             <div>
@@ -74,8 +74,8 @@ const Header = () => {
             <></>
           )}
 
-          <div class='collapse navbar-collapse' id='navbarColor03'>
-            <ul class='navbar-nav ms-auto'>
+          <div className='collapse navbar-collapse' id='navbarColor03'>
+            <ul className='navbar-nav ms-auto'>
               <div className='mx-3'>
                 {userInfo ? (
                   <h5>{userInfo.department + ' / ' + userInfo.name}</h5>
@@ -84,7 +84,7 @@ const Header = () => {
                 )}
               </div>
             </ul>
-            <div class='d-flex'></div>
+            <div className='d-flex'></div>
           </div>
         </div>
       </nav>

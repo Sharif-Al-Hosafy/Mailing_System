@@ -42,41 +42,33 @@ const RegisterScreen = () => {
   console.log(depName)
   return (
     <div>
-      <Button
-        variant='danger'
-        onClick={() => {
-          navigate('/daily')
-        }}
-      >
-        رجوع
-      </Button>
       <FormContainer className='text-center'>
-        <h1 className='mt-5 text-center'>تسجيل حساب</h1>
+        <h1 className='mt-5 text-center title'>تسجيل حساب</h1>
         {error ? <Message variant='danger'>{error}</Message> : <></>}
         <Card className='p-3 mt-3'>
           <Form onSubmit={submitHandler}>
             <Form.Group controlId='username'>
-              <Form.Label className='my-2'>Username</Form.Label>
+              <Form.Label className='my-2'>الاسم</Form.Label>
               <Form.Control
                 type='username'
-                placeholder='Enter username'
+                placeholder='ادخل الاسم'
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
             <Form.Group controlId='password'>
-              <Form.Label className='my-2'>Password</Form.Label>
+              <Form.Label className='my-2'>كلمة السر</Form.Label>
               <Form.Control
                 type='password'
-                placeholder='Enter password'
+                placeholder='ادخل كلمة السر'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               ></Form.Control>
             </Form.Group>
 
             <Form.Group controlId='department'>
-              <Form.Label className='my-2'>Department</Form.Label>
+              <Form.Label className='my-2'>القسم</Form.Label>
               <Form.Select
                 value={depId}
                 onChange={(e) => setDepId(e.target.value)}
@@ -87,7 +79,7 @@ const RegisterScreen = () => {
               </Form.Select>
             </Form.Group>
             <Button className='my-3' type='submit' variant='success'>
-              Register
+              تسجيل
             </Button>
           </Form>
         </Card>

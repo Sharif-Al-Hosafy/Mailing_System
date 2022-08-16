@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button, Table } from 'reactstrap'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { logout } from '../actions/userActions'
 import { Modal, Form, Card, Container } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
+import notificationSound from '../notification.wav'
 
 const DailyScreen = () => {
   let navigate = useNavigate()
-  let dispatch = useDispatch()
-
+  let count = 0
   let cnt = 0
+  const audioPlayer = useRef(null)
   const [docs, setDocs] = useState([])
   const [show, setShow] = useState(false)
   const [checkedState, setCheckedState] = useState(new Array(8).fill(false))
@@ -21,19 +21,33 @@ const DailyScreen = () => {
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
 
-  useEffect(() => {
-    const fetchDocs = async () => {
-      const { data } = await axios.get(
-        `/api/v1/files/daily/show/${userInfo.dep_id}`
-      )
-      setDocs(data)
-    }
+  const setRead = async (fileID, depID) => {
+    await axios.post(`/api/v1/files/notify/${fileID}/${depID}`)
+  }
 
-    fetchDocs()
+  const fetchDocs = () => {
+    axios.get(`/api/v1/files/daily/show/${userInfo.dep_id}`).then((res) => {
+      setDocs(res.data)
+      if (res.data.length !== count) {
+        console.log('notifications')
+        audioPlayer.current.play()
+      }
+      axios.get(`/api/v1/files/docNo/${userInfo.dep_id}`).then((tata) => {
+        count = tata.data[0].docTotal
+      })
+      console.log(res.data.length, count)
+    })
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchDocs()
+    }, 5000)
+    return () => clearInterval(interval)
   }, [])
 
   let getData = async (id) => {
-    const data = await axios.get(`/api/v1/files/open/${id}`)
+    await axios.get(`/api/v1/files/open/${id}`)
   }
 
   const handleOnChange = (position) => {
@@ -58,7 +72,9 @@ const DailyScreen = () => {
 
   return (
     <div>
-      <h1 className='text-center my-5'>المكاتبات اليومية</h1>
+      <h1 className='text-center my-5 title'>المكاتبات اليومية</h1>
+
+      <audio ref={audioPlayer} src={notificationSound} />
       <div className='container text-center'>
         <Card className='p-3'>
           <Container>
@@ -73,7 +89,10 @@ const DailyScreen = () => {
               </thead>
               <tbody>
                 {docs.map((el) => (
-                  <tr className='docTable'>
+                  <tr
+                    key={cnt}
+                    className={`docTable ${el.notify ? 'unread' : <></>}`}
+                  >
                     <td style={{ width: '30%' }}>
                       {userInfo.department === 'المدير العام' ||
                       userInfo.department === 'نائب المدير العام' ||
@@ -258,6 +277,7 @@ const DailyScreen = () => {
                         color='info'
                         onClick={() => {
                           getData(el.file_no)
+                          setRead(el.file_no, userInfo.dep_id)
                           navigate(`/doc`)
                         }}
                       >
@@ -269,6 +289,7 @@ const DailyScreen = () => {
                           color='warning'
                           onClick={() => {
                             getData(el.file_no)
+                            setRead(el.file_no, userInfo.dep_id)
                             window.open(
                               'http://localhost:5000/api/v1/files/editor'
                             )
@@ -282,9 +303,7 @@ const DailyScreen = () => {
                     </td>
                     <td style={{ width: '30%' }}>{el.summary}</td>
                     <td style={{ width: '30%' }}>{el.orgname}</td>
-                    <td style={{ width: '10%' }} scope='row'>
-                      {++cnt}
-                    </td>
+                    <td style={{ width: '10%' }}>{++cnt}</td>
                   </tr>
                 ))}
               </tbody>

@@ -45,15 +45,9 @@ const LoginScreen = () => {
             ></img>
           </div>
           <div className='my-4'>
-            <h1 className='text-center'>منظومة البريد</h1>
+            <h1 className='text-center mainTitle'>منظومة البريد</h1>
           </div>
-          {error ? (
-            <Message className='text-center' variant='danger'>
-              {error}
-            </Message>
-          ) : (
-            <></>
-          )}
+          {error ? <Message variant='danger'>{error}</Message> : <></>}
           <Form onSubmit={submitHandler}>
             <Form.Group>
               <Form.Select
