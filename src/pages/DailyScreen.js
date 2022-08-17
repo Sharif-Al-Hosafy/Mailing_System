@@ -3,8 +3,11 @@ import { Button, Table } from 'reactstrap'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Modal, Form, Card, Container } from 'react-bootstrap'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import notificationSound from '../notification.wav'
+import Loader from '../components/Loader'
+import { listDocs } from '../actions/docActions'
+import { faEraser } from '@fortawesome/free-solid-svg-icons'
 
 const DailyScreen = () => {
   let navigate = useNavigate()
@@ -20,29 +23,43 @@ const DailyScreen = () => {
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
+  const dispatch = useDispatch()
+
+  // const docList = useSelector((state) => state.docList)
+  // console.log(docList)
+  // const { loading, docs } = docList
 
   const setRead = async (fileID, depID) => {
+    console.log('unread')
     await axios.post(`/api/v1/files/notify/${fileID}/${depID}`)
   }
 
   const fetchDocs = () => {
     axios.get(`/api/v1/files/daily/show/${userInfo.dep_id}`).then((res) => {
       setDocs(res.data)
-      if (res.data.length !== count) {
-        console.log('notifications')
-        audioPlayer.current.play()
+      for (let i = 0; i < res.data.length; i++) {
+        if (res.data[i].notify == 1) {
+          audioPlayer.current.play()
+          setRead(res.data[i].file_no, userInfo.dep_id)
+        }
       }
+      // if (res.data.length !== count) {
+      //   audioPlayer.current.play()
+      // }
       axios.get(`/api/v1/files/docNo/${userInfo.dep_id}`).then((tata) => {
         count = tata.data[0].docTotal
       })
-      console.log(res.data.length, count)
     })
   }
 
   useEffect(() => {
+    fetchDocs()
+
     const interval = setInterval(() => {
       fetchDocs()
+      console.log(docs[0].notify)
     }, 5000)
+
     return () => clearInterval(interval)
   }, [])
 
@@ -87,6 +104,7 @@ const DailyScreen = () => {
                   <th scope='col'>م</th>
                 </tr>
               </thead>
+
               <tbody>
                 {docs.map((el) => (
                   <tr

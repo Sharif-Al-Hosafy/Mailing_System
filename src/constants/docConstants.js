@@ -1,0 +1,3 @@
+export const DOC_LIST_REQUEST = 'DOC_LIST_REQUEST'
+export const DOC_LIST_SUCCESS = 'DOC_LIST_SUCCESS'
+export const DOC_LIST_FAIL = 'DOC_LIST_FAIL'
