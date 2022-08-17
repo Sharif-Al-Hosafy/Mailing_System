@@ -3,11 +3,9 @@ import { Button, Table } from 'reactstrap'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { Modal, Form, Card, Container } from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import notificationSound from '../notification.wav'
-import Loader from '../components/Loader'
-import { listDocs } from '../actions/docActions'
-import { faEraser } from '@fortawesome/free-solid-svg-icons'
+import { faCropSimple } from '@fortawesome/free-solid-svg-icons'
 
 const DailyScreen = () => {
   let navigate = useNavigate()
@@ -23,29 +21,24 @@ const DailyScreen = () => {
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
-  const dispatch = useDispatch()
-
-  // const docList = useSelector((state) => state.docList)
-  // console.log(docList)
-  // const { loading, docs } = docList
 
   const setRead = async (fileID, depID) => {
-    console.log('unread')
     await axios.post(`/api/v1/files/notify/${fileID}/${depID}`)
+  }
+
+  const setReadColor = async (fileID, depID) => {
+    await axios.post(`/api/v1/files/read/${fileID}/${depID}`)
   }
 
   const fetchDocs = () => {
     axios.get(`/api/v1/files/daily/show/${userInfo.dep_id}`).then((res) => {
       setDocs(res.data)
       for (let i = 0; i < res.data.length; i++) {
-        if (res.data[i].notify == 1) {
+        if (res.data[i].notify === 1) {
           audioPlayer.current.play()
           setRead(res.data[i].file_no, userInfo.dep_id)
         }
       }
-      // if (res.data.length !== count) {
-      //   audioPlayer.current.play()
-      // }
       axios.get(`/api/v1/files/docNo/${userInfo.dep_id}`).then((tata) => {
         count = tata.data[0].docTotal
       })
@@ -57,7 +50,8 @@ const DailyScreen = () => {
 
     const interval = setInterval(() => {
       fetchDocs()
-      console.log(docs[0].notify)
+
+      console.log(docs)
     }, 5000)
 
     return () => clearInterval(interval)
@@ -109,7 +103,7 @@ const DailyScreen = () => {
                 {docs.map((el) => (
                   <tr
                     key={cnt}
-                    className={`docTable ${el.notify ? 'unread' : <></>}`}
+                    className={`docTable ${el.notify_color ? 'unread' : <></>}`}
                   >
                     <td style={{ width: '30%' }}>
                       {userInfo.department === 'المدير العام' ||
@@ -295,7 +289,7 @@ const DailyScreen = () => {
                         color='info'
                         onClick={() => {
                           getData(el.file_no)
-                          setRead(el.file_no, userInfo.dep_id)
+                          setReadColor(el.file_no, userInfo.dep_id)
                           navigate(`/doc`)
                         }}
                       >
@@ -307,7 +301,7 @@ const DailyScreen = () => {
                           color='warning'
                           onClick={() => {
                             getData(el.file_no)
-                            setRead(el.file_no, userInfo.dep_id)
+                            setReadColor(el.file_no, userInfo.dep_id)
                             window.open(
                               'http://localhost:5000/api/v1/files/editor'
                             )

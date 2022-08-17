@@ -28,9 +28,9 @@ const fileToDailyScreenImp = async (req, res) => {
   on imd.id = imf.id
   where imd.id = '${req.params.fileId}';`
 
-  let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify) values ("${
+  let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify,notify_color) values ("${
     req.params.fileId
-  }",${8},${1});`
+  }",${8},${1},${1});`
 
   const file = await db.query(queryString).catch((err) => {
     throw err
@@ -49,9 +49,9 @@ const fileToDailyScreenExp = async (req, res) => {
   on emd.id = emf.id
   where emd.id = '${req.params.fileId}';`
 
-  let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify) values ("${
+  let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify,notify_color) values ("${
     req.params.fileId
-  }",${8},${1});`
+  }",${8},${1},${1});`
 
   const file = await db.query(queryString).catch((err) => {
     throw err
@@ -85,7 +85,7 @@ const sendFiles = async (req, res) => {
     if (checkedDeps[i] == true) departments.push(i)
 
   departments.forEach(async (dep) => {
-    let queryString = `insert into mail_system.dep_file (file_id,dep_id,notify) values ('${fileId}',${dep},${1})`
+    let queryString = `insert into mail_system.dep_file (file_id,dep_id,notify,notify_color) values ('${fileId}',${dep},${1},${1})`
     await db.query(queryString).catch((err) => {
       throw err
     })
@@ -96,7 +96,7 @@ const sendFiles = async (req, res) => {
 
 const showDailyDocuments = async (req, res) => {
   let dep_id = req.params.id
-  let queryString = ` SELECT f.file_no,f.file_data,f.orgname,f.summary,d.dep_id, d.notify FROM file f join dep_file d on f.file_no = d.file_id  where d.dep_id = ${dep_id};`
+  let queryString = ` SELECT f.file_no,f.file_data,f.orgname,f.summary,d.dep_id, d.notify,d.notify_color FROM file f join dep_file d on f.file_no = d.file_id  where d.dep_id = ${dep_id};`
   const files = await db.query(queryString).catch((err) => {
     throw err
   })
@@ -131,13 +131,20 @@ const getPdf = (req, res) => {
   })
 }
 
-const messageIsRead = async (req, res) => {
-  console.log('hi')
+const messageIsSent = async (req, res) => {
   let queryString = `update mail_system.dep_file set notify = 0 where  file_id = '${req.params.fileId}' and dep_id = ${req.params.depId};`
   const docsNo = await db.query(queryString).catch((err) => {
     throw err
   })
-  res.status(201).json({ message: 'success' })
+  res.status(200).json({ message: 'success' })
+}
+
+const messageIsRead = async (req, res) => {
+  let queryString = `update mail_system.dep_file set notify_color = 0 where  file_id = '${req.params.fileId}' and dep_id = ${req.params.depId};`
+  const docsNo = await db.query(queryString).catch((err) => {
+    throw err
+  })
+  res.status(200).json({ message: 'success' })
 }
 
 const savePdf = async (req, res) => {
@@ -160,6 +167,7 @@ module.exports = {
   showDailyDocuments,
   getPdf,
   messageIsRead,
+  messageIsSent,
   getPdfEditor,
   savePdf,
   sendFiles,

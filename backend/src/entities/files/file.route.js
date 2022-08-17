@@ -7,6 +7,7 @@ const {
   openFile,
   showDailyDocuments,
   messageIsRead,
+  messageIsSent,
   getPdf,
   getPdfEditor,
   savePdf,
@@ -16,7 +17,8 @@ const {
 const authMiddleware = require('../../utils/authMiddleware')
 
 router.route('/send').post(sendFiles)
-router.route('/notify/:fileId/:depId').post(messageIsRead)
+router.route('/notify/:fileId/:depId').post(messageIsSent) // notification sound
+router.route('/read/:fileId/:depId').post(messageIsRead) // message is read " color change "
 router.route('/docNo/:depId').get(docTotal)
 router.route('/savepdf').post(savePdf)
 router.route('/editor').get(getPdfEditor)
