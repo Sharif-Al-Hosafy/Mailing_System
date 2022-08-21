@@ -26,7 +26,7 @@ const fileToDailyScreenImp = async (req, res) => {
   select imd.id,imf.pdffile,imd.orgname,imd.summary from archieve.importdata imd
   join archieve.importfile imf 
   on imd.id = imf.id
-  where imd.id = '${req.params.fileId}';`
+  where imd.id = "${req.params.fileId}";`
 
   let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify,notify_color) values ("${
     req.params.fileId
@@ -96,7 +96,7 @@ const sendFiles = async (req, res) => {
 
 const showDailyDocuments = async (req, res) => {
   let dep_id = req.params.id
-  let queryString = ` SELECT f.file_no,f.file_data,f.orgname,f.summary,d.dep_id, d.notify,d.notify_color FROM file f join dep_file d on f.file_no = d.file_id  where d.dep_id = ${dep_id};`
+  let queryString = ` SELECT f.file_no,f.file_data,f.orgname,f.summary,d.id,d.dep_id, d.notify,d.notify_color FROM file f join dep_file d on f.file_no = d.file_id  where d.dep_id = ${dep_id} order by d.id desc;`
   const files = await db.query(queryString).catch((err) => {
     throw err
   })
@@ -132,13 +132,13 @@ const getPdf = (req, res) => {
 }
 
 const messageIsSent = async (req, res) => {
-  let queryString = `update mail_system.dep_file set notify = 0 where  file_id = '${req.params.fileId}' and dep_id = ${req.params.depId};`
+  let queryString = `update mail_system.dep_file set notify = 0 where dep_id = ${req.params.depId};`
   const docsNo = await db.query(queryString).catch((err) => {
     throw err
   })
   res.status(200).json({ message: 'success' })
 }
-
+//file_id = '${req.params.fileId}'
 const messageIsRead = async (req, res) => {
   let queryString = `update mail_system.dep_file set notify_color = 0 where  file_id = '${req.params.fileId}' and dep_id = ${req.params.depId};`
   const docsNo = await db.query(queryString).catch((err) => {
@@ -158,6 +158,13 @@ const savePdf = async (req, res) => {
   })
 }
 
+const removeOnSend = async (req, res) => {
+  let query = `delete from mail_system.dep_file where file_id = "${req.params.fileId}"  and dep_id = ${req.params.depId}; `
+  const logs = await db.query(query).catch((err) => {
+    throw err
+  })
+  res.status(201).json(logs)
+}
 module.exports = {
   fileToDailyScreenImp,
   fileToDailyScreenExp,
@@ -172,4 +179,5 @@ module.exports = {
   savePdf,
   sendFiles,
   docTotal,
+  removeOnSend,
 }

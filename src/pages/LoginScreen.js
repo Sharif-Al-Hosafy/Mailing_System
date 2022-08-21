@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { login } from '../actions/userActions'
 import Message from '../components/Message'
 import axios from 'axios'
+import { postLog } from '../logger'
 
 const LoginScreen = () => {
   const navigate = useNavigate()
@@ -32,6 +33,7 @@ const LoginScreen = () => {
   const submitHandler = (e) => {
     e.preventDefault()
     dispatch(login(username, password))
+    postLog(username, 'دخول', '-')
   }
   return (
     <div>

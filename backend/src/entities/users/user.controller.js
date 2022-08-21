@@ -66,9 +66,28 @@ const login = async (req, res) => {
   })
 }
 
+const addLog = async (req, res) => {
+  let query = `insert into mail_system.logs (username, action,time,date,file_name) values ("${req.body.username}", "${req.body.action}", CURRENT_TIME(),CURRENT_DATE(),"${req.body.file_name}");`
+  const logs = await db.query(query).catch((err) => {
+    throw err
+  })
+  res.status(201).json({ message: 'success' })
+}
+
+const showLogs = async (req, res) => {
+  let query = `select * from mail_system.logs order by id desc;`
+  const logs = await db.query(query).catch((err) => {
+    throw err
+  })
+  console.log(logs)
+  res.status(201).json(logs)
+}
+
 module.exports = {
   login,
   insertUser,
   getAllDep,
   getAllUser,
+  showLogs,
+  addLog,
 }

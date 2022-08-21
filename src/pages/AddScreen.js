@@ -3,6 +3,8 @@ import { Form } from 'react-bootstrap'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { useSelector } from 'react-redux'
+import { postLog } from '../logger'
 
 const AddScreen = () => {
   let navigate = useNavigate()
@@ -11,6 +13,8 @@ const AddScreen = () => {
   const [docs, setDocs] = useState([])
   const [docNum, setDocNum] = useState()
   const [imp, setImp] = useState(true)
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
 
   const fetchDocs = async () => {
     if (imp) fetch = await axios.get(`/api/v1/files/imp/${docNum}`)
@@ -42,7 +46,6 @@ const AddScreen = () => {
               <div key='inline-radio'>
                 <Form.Check
                   inline
-                  reverse
                   name='group1'
                   type='radio'
                   label='وارد'
@@ -72,37 +75,46 @@ const AddScreen = () => {
             </div>
 
             <div className='container text-center'>
-              <Table className='table table-hover'>
-                <thead>
-                  <tr>
-                    <th scope='col'>التاريخ</th>
-                    <th scope='col'>الملخص</th>
-                    <th scope='col'>اسم المكاتبة</th>
-                    <th scope='col'>م</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {docs.map((el) => (
-                    <tr
-                      className='docTable'
-                      onClick={() => {
-                        addDaily(el.id)
-                        alert('تم إرسال المكاتبة')
-                        navigate('/daily')
-                      }}
-                    >
-                      <td>
-                        {imp
-                          ? el.importdate.split('T')[0]
-                          : el.exportdate.split('T')[0]}
-                      </td>
-                      <td style={{ width: '40%' }}>{el.summary}</td>
-                      <td style={{ width: '30%' }}>{el.orgname}</td>
-                      <th scope='row'>{++cnt}</th>
+              {docs.length ? (
+                <Table className='table table-hover'>
+                  <thead>
+                    <tr>
+                      <th scope='col'>التاريخ</th>
+                      <th scope='col'>الملخص</th>
+                      <th scope='col'>اسم المكاتبة</th>
+                      <th scope='col'>م</th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
+                  </thead>
+                  <tbody>
+                    {docs.map((el) => (
+                      <tr
+                        className='docTable'
+                        onClick={() => {
+                          addDaily(el.id)
+                          postLog(
+                            userInfo.name,
+                            'اضافة مكاتبة',
+                            el.orgname + ' ' + el.id
+                          )
+                          alert('تم إرسال المكاتبة')
+                          navigate('/daily')
+                        }}
+                      >
+                        <td>
+                          {imp
+                            ? el.importdate.split('T')[0]
+                            : el.exportdate.split('T')[0]}
+                        </td>
+                        <td style={{ width: '40%' }}>{el.summary}</td>
+                        <td style={{ width: '30%' }}>{el.orgname}</td>
+                        <th scope='row'>{++cnt}</th>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              ) : (
+                <></>
+              )}
             </div>
           </Container>
         </Card>
