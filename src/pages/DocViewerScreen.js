@@ -5,7 +5,7 @@ const DocViewerScreen = () => {
   return (
     <div>
       <object data={pdf} type='application/pdf' width='100%' height='580px'>
-        <a href={pdf}></a>
+        <a href={pdf}>pdf</a>
       </object>
     </div>
   )

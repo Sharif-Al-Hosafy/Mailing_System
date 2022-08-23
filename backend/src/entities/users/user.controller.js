@@ -13,7 +13,7 @@ const getAllDep = async (req, res) => {
 }
 
 const getAllUser = async (req, res) => {
-  let queryString = `select username from mail_system.users`
+  let queryString = `select username from mail_system.users u join mail_system.departments d on u.dep_id = d.id where d.dep_name = "${req.params.dep_name}";`
   const users = await db.query(queryString).catch((err) => {
     throw err
   })
@@ -75,11 +75,10 @@ const addLog = async (req, res) => {
 }
 
 const showLogs = async (req, res) => {
-  let query = `select * from mail_system.logs order by id desc;`
+  let query = `SELECT username, action,time_format(time,"%r")as time,date,file_name FROM mail_system.logs order by id desc;`
   const logs = await db.query(query).catch((err) => {
     throw err
   })
-  console.log(logs)
   res.status(201).json(logs)
 }
 

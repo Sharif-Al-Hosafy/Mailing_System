@@ -9,7 +9,7 @@ import DocViewerScreen from './pages/DocViewerScreen'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import { useSelector } from 'react-redux'
-import Templog from './pages/Templog'
+import AuditLogScreen from './pages/AuditLogScreen'
 
 function App() {
   const userLogin = useSelector((state) => state.userLogin)
@@ -25,7 +25,7 @@ function App() {
           <Route path='/doc' element={<DocViewerScreen />} />
           <Route path='/add' element={<AddScreen />} />
           <Route path='/register' element={<RegisterScreen />} />
-          <Route path='/log' element={<Templog />} />
+          <Route path='/log' element={<AuditLogScreen />} />
         </Routes>
       </main>
     </Router>

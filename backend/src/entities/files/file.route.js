@@ -10,10 +10,12 @@ const {
   messageIsSent,
   getPdf,
   getPdfEditor,
+  showFileSearch,
   savePdf,
   sendFiles,
   docTotal,
   removeOnSend,
+  showSentDocs,
 } = require('./file.controller')
 const authMiddleware = require('../../utils/authMiddleware')
 
@@ -30,5 +32,8 @@ router.route('/daily/save/imp/:fileId').post(fileToDailyScreenImp) // add docume
 router.route('/daily/save/exp/:fileId').post(fileToDailyScreenExp) // add document to daily screen exp
 router.route('/daily/show/:id').get(showDailyDocuments) // show documents from daily screen
 router.route('/open/:fileId').get(openFile) // open a document
+router.route('/openFileSearch/:fileId').get(showFileSearch) // open file search a document
 router.route('/remove/:fileId/:depId').delete(removeOnSend) //delete row after sending file
+router.route('/daily/sent/:depId').get(showSentDocs) // show documents from daily screen
+
 module.exports = router

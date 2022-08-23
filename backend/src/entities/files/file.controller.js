@@ -4,12 +4,13 @@ const db = require('../../config/db.mail') // database archieve
 const { Buffer } = require('buffer')
 const fs = require('fs')
 let staticID
-
 const fileListImp = async (req, res) => {
   let queryString = `select id,orgname,importid,summary,importdate from archieve.importdata where importid = ${req.params.id} ORDER BY importdate DESC;`
   const file = await db.query(queryString).catch((err) => {
     throw err
   })
+
+  if (file.length == 0) throw err(404, 'لا يوجد مكاتبة بهذا الرقم')
   res.status(200).json(file)
 }
 
@@ -18,6 +19,7 @@ const fileListExp = async (req, res) => {
   const file = await db.query(queryString).catch((err) => {
     throw err
   })
+  if (file.length == 0) throw err(404, 'لا يوجد مكاتبة بهذا الرقم')
   res.status(200).json(file)
 }
 
@@ -27,15 +29,20 @@ const fileToDailyScreenImp = async (req, res) => {
   join archieve.importfile imf 
   on imd.id = imf.id
   where imd.id = "${req.params.fileId}";`
-
-  let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify,notify_color) values ("${
-    req.params.fileId
-  }",${8},${1},${1});`
-
   const file = await db.query(queryString).catch((err) => {
     throw err
   })
 
+  let qInsertion = `insert into mail_system.filesent (file_id, dep_id) values ("${
+    req.params.fileId
+  }",${5});`
+  const insertion = await db.query(qInsertion).catch((err) => {
+    throw err
+  })
+
+  let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify,notify_color) values ("${
+    req.params.fileId
+  }",${8},${1},${1});`
   const file2 = await db.query(queryString2).catch((err) => {
     throw err
   })
@@ -48,19 +55,22 @@ const fileToDailyScreenExp = async (req, res) => {
   join archieve.exportfile emf 
   on emd.id = emf.id
   where emd.id = '${req.params.fileId}';`
-
-  let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify,notify_color) values ("${
-    req.params.fileId
-  }",${8},${1},${1});`
-
   const file = await db.query(queryString).catch((err) => {
     throw err
   })
 
+  let qInsertion = `insert into mail_system.filesent (file_id, dep_id) values ('${req.params.fileId}',5);`
+  const insertion = await db.query(qInsertion).catch((err) => {
+    throw err
+  })
+
+  let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify,notify_color) values ("${
+    req.params.fileId
+  }",${8},${1},${1});`
   const file2 = await db.query(queryString2).catch((err) => {
     throw err
   })
-  res.status(200).json(file2)
+  res.status(200).json(insertion)
 }
 
 const openFile = async (req, res) => {
@@ -71,6 +81,22 @@ const openFile = async (req, res) => {
 
   staticID = req.params.fileId
   let buff = file[0].file_data
+  fs.writeFileSync('src/pages/sample.pdf', buff, { encoding: 'ascii' })
+
+  return res.status(200).json({ buff })
+}
+
+const showFileSearch = async (req, res) => {
+  let fileType
+  if (req.params.fileId.includes('و')) fileType = 'importfile'
+  else fileType = 'exportfile'
+
+  let queryString = `select pdffile from archieve.${fileType} where id='${req.params.fileId}';`
+  const file = await db.query(queryString).catch((err) => {
+    throw err
+  })
+  staticID = req.params.fileId
+  let buff = file[0].pdffile
   fs.writeFileSync('src/pages/sample.pdf', buff, { encoding: 'ascii' })
 
   return res.status(200).json({ buff })
@@ -97,6 +123,15 @@ const sendFiles = async (req, res) => {
 const showDailyDocuments = async (req, res) => {
   let dep_id = req.params.id
   let queryString = ` SELECT f.file_no,f.file_data,f.orgname,f.summary,d.id,d.dep_id, d.notify,d.notify_color FROM file f join dep_file d on f.file_no = d.file_id  where d.dep_id = ${dep_id} order by d.id desc;`
+  const files = await db.query(queryString).catch((err) => {
+    throw err
+  })
+  res.status(200).json(files)
+}
+
+const showSentDocs = async (req, res) => {
+  let dep_id = req.params.depId
+  let queryString = ` SELECT f.file_no,f.file_data,f.orgname,f.summary,d.id,d.dep_id FROM file f join filesent d on f.file_no = d.file_id  where d.dep_id = ${dep_id} order by d.id desc;`
   const files = await db.query(queryString).catch((err) => {
     throw err
   })
@@ -159,11 +194,16 @@ const savePdf = async (req, res) => {
 }
 
 const removeOnSend = async (req, res) => {
-  let query = `delete from mail_system.dep_file where file_id = "${req.params.fileId}"  and dep_id = ${req.params.depId}; `
-  const logs = await db.query(query).catch((err) => {
+  let queryString = `insert into mail_system.filesent (file_id, dep_id) values ("${req.params.fileId}",${req.params.depId});`
+  const insertion = await db.query(queryString).catch((err) => {
     throw err
   })
-  res.status(201).json(logs)
+
+  let query = `delete from mail_system.dep_file where file_id ="${req.params.fileId}" and dep_id = ${req.params.depId}; `
+  const deletion = await db.query(query).catch((err) => {
+    throw err
+  })
+  res.status(201).json({ message: 'success' })
 }
 module.exports = {
   fileToDailyScreenImp,
@@ -180,4 +220,6 @@ module.exports = {
   sendFiles,
   docTotal,
   removeOnSend,
+  showFileSearch,
+  showSentDocs,
 }

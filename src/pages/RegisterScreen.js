@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import FormContainer from '../components/formContainer'
 import { Form, Button, Card } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { register, logout } from '../actions/userActions'
+import { register } from '../actions/userActions'
 import axios from 'axios'
 import Message from '../components/Message'
 
@@ -12,7 +11,6 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('')
   const [depId, setDepId] = useState('1')
   const [depName, setDepName] = useState([])
-  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   let cnt = 0
@@ -35,8 +33,6 @@ const RegisterScreen = () => {
       alert(error)
     } else {
       alert('user registered')
-      dispatch(logout())
-      navigate('/')
     }
   }
   console.log(depName)

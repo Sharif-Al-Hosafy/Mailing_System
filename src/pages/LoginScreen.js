@@ -7,13 +7,16 @@ import { login } from '../actions/userActions'
 import Message from '../components/Message'
 import axios from 'axios'
 import { postLog } from '../logger'
+import { Col, Row } from 'reactstrap'
 
 const LoginScreen = () => {
   const navigate = useNavigate()
 
-  const [username, setUsername] = useState('admin')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [users, setUsers] = useState([])
+  const [deps, setDeps] = useState([])
+  const [department, setDepartment] = useState('')
   const dispatch = useDispatch()
   const userLogin = useSelector((state) => state.userLogin)
   const { error, userInfo } = userLogin
@@ -22,16 +25,21 @@ const LoginScreen = () => {
     if (userInfo) {
       navigate('/daily')
     }
+    const fetchDeps = async () => {
+      const { data } = await axios.get('/api/v1/users/dep')
+      setDeps(data)
+    }
     const fetchUsers = async () => {
-      const { data } = await axios.get('/api/v1/users/users')
+      const { data } = await axios.get(`/api/v1/users/${department}`)
       setUsers(data)
     }
-
+    fetchDeps()
     fetchUsers()
-  }, [navigate, userInfo])
+  }, [navigate, userInfo, department])
 
   const submitHandler = (e) => {
     e.preventDefault()
+    console.log(username, password)
     dispatch(login(username, password))
     postLog(username, 'دخول', '-')
   }
@@ -52,15 +60,32 @@ const LoginScreen = () => {
           {error ? <Message variant='danger'>{error}</Message> : <></>}
           <Form onSubmit={submitHandler}>
             <Form.Group>
-              <Form.Select
-                onChange={(e) => {
-                  setUsername(e.target.value)
-                }}
-              >
-                {users.map((user) => (
-                  <option value={user.username}>{user.username}</option>
-                ))}
-              </Form.Select>
+              <Row>
+                <Col>
+                  <Form.Select
+                    onChange={(e) => {
+                      setDepartment(e.target.value)
+                    }}
+                  >
+                    <option value={''}>{}</option>
+                    {deps.map((dep) => (
+                      <option value={dep.dep_name}>{dep.dep_name}</option>
+                    ))}
+                  </Form.Select>
+                </Col>
+                <Col>
+                  <Form.Select
+                    onChange={(e) => {
+                      setUsername(e.target.value)
+                    }}
+                  >
+                    <option value={''}>{''}</option>
+                    {users.map((user) => (
+                      <option value={user.username}>{user.username}</option>
+                    ))}
+                  </Form.Select>
+                </Col>
+              </Row>
             </Form.Group>
             <Form.Group className='form-group py-3'>
               <Form.Control
