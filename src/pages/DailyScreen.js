@@ -39,7 +39,6 @@ const DailyScreen = () => {
   const handleShow = () => setShow(true)
   const handleConfirmShow = () => {
     setConfirm(true)
-    console.log(confirm)
   }
   const setRead = async (depID) => {
     audioPlayer.current.play()
@@ -149,53 +148,6 @@ const DailyScreen = () => {
                                 handleConfirmShow()
                               }}
                             />
-                            {selectedFile ? (
-                              <Modal show={confirm} onHide={handleConfirmClose}>
-                                <Modal.Header closeButton>
-                                  <Modal.Title>رسالة تأكيد</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                  {'هل أنت متـأكد من حذف' +
-                                    ' - ' +
-                                    selectedFile.orgname +
-                                    ' - ' +
-                                    selectedFile.file_no}
-                                </Modal.Body>
-                                <Modal.Footer>
-                                  <Button
-                                    variant='danger'
-                                    onClick={() => {
-                                      handleConfirmClose()
-                                    }}
-                                  >
-                                    غلق
-                                  </Button>
-                                  <Button
-                                    variant='success'
-                                    onClick={() => {
-                                      removeDoc(
-                                        selectedFile.file_no,
-                                        selectedFile.dep_id
-                                      )
-
-                                      postLog(
-                                        userInfo.name,
-                                        'اضافة مكاتبة',
-                                        selectedFile.orgname +
-                                          ' ' +
-                                          selectedFile.file_no
-                                      )
-
-                                      handleConfirmClose()
-                                    }}
-                                  >
-                                    تأكيد الحذف
-                                  </Button>
-                                </Modal.Footer>
-                              </Modal>
-                            ) : (
-                              <></>
-                            )}
                           </td>
                           <td style={{ width: '30%' }}>
                             {userInfo.department === 'المدير العام' ||
@@ -214,181 +166,7 @@ const DailyScreen = () => {
                             ) : (
                               <></>
                             )}
-                            <Modal show={show} onHide={handleClose}>
-                              <Modal.Header closeButton>
-                                <Modal.Title style={{ alignItems: 'center' }}>
-                                  الأقسام المرسل إليها
-                                </Modal.Title>
-                              </Modal.Header>
-                              <Form onSubmit={submitHandler}>
-                                <div>
-                                  <Modal.Body>
-                                    <Form.Group>
-                                      <div>
-                                        <Form.Check
-                                          inline
-                                          type='checkbox'
-                                          label='الإدارة القانونية'
-                                          style={{ marginRight: '28px' }}
-                                          checked={checkedState[1]}
-                                          onChange={() => handleOnChange(1)}
-                                          disabled={
-                                            userInfo.department ===
-                                              'المدير العام' ||
-                                            userInfo.department ===
-                                              'نائب المدير العام'
-                                              ? true
-                                              : false
-                                          }
-                                        />
-                                        <Form.Check
-                                          inline
-                                          type='checkbox'
-                                          label='التخطيط و المتابعة'
-                                          checked={checkedState[2]}
-                                          onChange={() => handleOnChange(2)}
-                                          disabled={
-                                            userInfo.department ===
-                                              'المدير العام' ||
-                                            userInfo.department ===
-                                              'نائب المدير العام'
-                                              ? true
-                                              : false
-                                          }
-                                        />
-                                      </div>
-                                      <div>
-                                        <Form.Check
-                                          inline
-                                          type='checkbox'
-                                          label='قسم العقود'
-                                          style={{ marginRight: '46px' }}
-                                          checked={checkedState[3]}
-                                          onChange={() => handleOnChange(3)}
-                                          disabled={
-                                            userInfo.department ===
-                                              'المدير العام' ||
-                                            userInfo.department ===
-                                              'نائب المدير العام'
-                                              ? true
-                                              : false
-                                          }
-                                        />
-                                        <Form.Check
-                                          inline
-                                          type='checkbox'
-                                          label='الإدارة المالية'
-                                          checked={checkedState[4]}
-                                          onChange={() => handleOnChange(4)}
-                                          disabled={
-                                            userInfo.department ===
-                                              'المدير العام' ||
-                                            userInfo.department ===
-                                              'نائب المدير العام'
-                                              ? true
-                                              : false
-                                          }
-                                        />
-                                      </div>
-                                      <div>
-                                        <Form.Check
-                                          inline
-                                          type='checkbox'
-                                          label='الأرشيف العام'
-                                          style={{ marginRight: '34px' }}
-                                          checked={checkedState[5]}
-                                          onChange={() => handleOnChange(5)}
-                                          disabled={
-                                            userInfo.department ===
-                                              'المدير العام' ||
-                                            userInfo.department ===
-                                              'نائب المدير العام'
-                                              ? true
-                                              : false
-                                          }
-                                        />
-                                        <Form.Check
-                                          inline
-                                          type='checkbox'
-                                          label='المدير العام'
-                                          checked={checkedState[6]}
-                                          onChange={() => handleOnChange(6)}
-                                          disabled={
-                                            userInfo.department ===
-                                              'المدير العام' ||
-                                            userInfo.department ===
-                                              'نائب المدير العام'
-                                              ? true
-                                              : false
-                                          }
-                                        />
-                                      </div>
-                                      <div>
-                                        <Form.Check
-                                          inline
-                                          type='checkbox'
-                                          label='نائب المدير العام'
-                                          checked={checkedState[7]}
-                                          onChange={() => handleOnChange(7)}
-                                          disabled={
-                                            userInfo.department ===
-                                              'المدير العام' ||
-                                            userInfo.department ===
-                                              'نائب المدير العام'
-                                              ? true
-                                              : false
-                                          }
-                                        />
-                                        <Form.Check
-                                          inline
-                                          type='checkbox'
-                                          label='سكرتير المدير العام'
-                                          checked={checkedState[8]}
-                                          onChange={() => handleOnChange(8)}
-                                          disabled={
-                                            userInfo.department ===
-                                              'سكرتير المدير العام' ||
-                                            userInfo.department ===
-                                              'نائب المدير العام'
-                                              ? true
-                                              : false
-                                          }
-                                        />
-                                      </div>
-                                    </Form.Group>
-                                  </Modal.Body>
-                                </div>
-                                <div>
-                                  <Button
-                                    variant='danger'
-                                    style={{ margin: '10px' }}
-                                    onClick={handleClose}
-                                  >
-                                    غلق
-                                  </Button>
-                                  <Button
-                                    type='submit'
-                                    variant='success'
-                                    onClick={() => {
-                                      handleClose()
-                                      postLog(
-                                        userInfo.name,
-                                        'إرسال مكاتبة',
-                                        selectedFile.orgname +
-                                          ' ' +
-                                          selectedFile.file_no
-                                      )
-                                      removeDoc(
-                                        selectedFile.file_no,
-                                        userInfo.dep_id
-                                      )
-                                    }}
-                                  >
-                                    إرسال
-                                  </Button>
-                                </div>
-                              </Form>
-                            </Modal>
+
                             <Button
                               variant='info'
                               onClick={() => {
@@ -490,6 +268,204 @@ const DailyScreen = () => {
           </Tab>
         </Tabs>
       </Container>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title style={{ alignItems: 'center' }}>
+            الأقسام المرسل إليها
+          </Modal.Title>
+        </Modal.Header>
+        <Form onSubmit={submitHandler}>
+          <div>
+            <Modal.Body>
+              <Form.Group>
+                <div>
+                  <Form.Check
+                    inline
+                    type='checkbox'
+                    label='الإدارة القانونية'
+                    style={{ marginRight: '28px' }}
+                    checked={checkedState[1]}
+                    onChange={() => handleOnChange(1)}
+                    disabled={
+                      userInfo.department === 'المدير العام' ||
+                      userInfo.department === 'نائب المدير العام'
+                        ? true
+                        : false
+                    }
+                  />
+                  <Form.Check
+                    inline
+                    type='checkbox'
+                    label='التخطيط و المتابعة'
+                    checked={checkedState[2]}
+                    onChange={() => handleOnChange(2)}
+                    disabled={
+                      userInfo.department === 'المدير العام' ||
+                      userInfo.department === 'نائب المدير العام'
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+                <div>
+                  <Form.Check
+                    inline
+                    type='checkbox'
+                    label='قسم العقود'
+                    style={{ marginRight: '46px' }}
+                    checked={checkedState[3]}
+                    onChange={() => handleOnChange(3)}
+                    disabled={
+                      userInfo.department === 'المدير العام' ||
+                      userInfo.department === 'نائب المدير العام'
+                        ? true
+                        : false
+                    }
+                  />
+                  <Form.Check
+                    inline
+                    type='checkbox'
+                    label='الإدارة المالية'
+                    checked={checkedState[4]}
+                    onChange={() => handleOnChange(4)}
+                    disabled={
+                      userInfo.department === 'المدير العام' ||
+                      userInfo.department === 'نائب المدير العام'
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+                <div>
+                  <Form.Check
+                    inline
+                    type='checkbox'
+                    label='الأرشيف العام'
+                    style={{ marginRight: '34px' }}
+                    checked={checkedState[5]}
+                    onChange={() => handleOnChange(5)}
+                    disabled={
+                      userInfo.department === 'المدير العام' ||
+                      userInfo.department === 'نائب المدير العام'
+                        ? true
+                        : false
+                    }
+                  />
+                  <Form.Check
+                    inline
+                    type='checkbox'
+                    label='المدير العام'
+                    checked={checkedState[6]}
+                    onChange={() => handleOnChange(6)}
+                    disabled={
+                      userInfo.department === 'المدير العام' ||
+                      userInfo.department === 'نائب المدير العام'
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+                <div>
+                  <Form.Check
+                    inline
+                    type='checkbox'
+                    label='نائب المدير العام'
+                    checked={checkedState[7]}
+                    onChange={() => handleOnChange(7)}
+                    disabled={
+                      userInfo.department === 'المدير العام' ||
+                      userInfo.department === 'نائب المدير العام'
+                        ? true
+                        : false
+                    }
+                  />
+                  <Form.Check
+                    inline
+                    type='checkbox'
+                    label='سكرتير المدير العام'
+                    checked={checkedState[8]}
+                    onChange={() => handleOnChange(8)}
+                    disabled={
+                      userInfo.department === 'سكرتير المدير العام' ||
+                      userInfo.department === 'نائب المدير العام'
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+              </Form.Group>
+            </Modal.Body>
+          </div>
+          <div>
+            <Button
+              variant='danger'
+              style={{ margin: '10px' }}
+              onClick={handleClose}
+            >
+              غلق
+            </Button>
+            <Button
+              type='submit'
+              variant='success'
+              onClick={() => {
+                handleClose()
+                postLog(
+                  userInfo.name,
+                  'إرسال مكاتبة',
+                  selectedFile.orgname + ' ' + selectedFile.file_no
+                )
+                removeDoc(selectedFile.file_no, userInfo.dep_id)
+              }}
+            >
+              إرسال
+            </Button>
+          </div>
+        </Form>
+      </Modal>
+
+      {selectedFile ? (
+        <Modal show={confirm} onHide={handleConfirmClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>رسالة تأكيد</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {'هل أنت متـأكد من حذف' +
+              ' - ' +
+              selectedFile.orgname +
+              ' - ' +
+              selectedFile.file_no}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant='danger'
+              onClick={() => {
+                handleConfirmClose()
+              }}
+            >
+              غلق
+            </Button>
+            <Button
+              variant='success'
+              onClick={() => {
+                removeDoc(selectedFile.file_no, selectedFile.dep_id)
+
+                postLog(
+                  userInfo.name,
+                  'اضافة مكاتبة',
+                  selectedFile.orgname + ' ' + selectedFile.file_no
+                )
+
+                handleConfirmClose()
+              }}
+            >
+              تأكيد الحذف
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      ) : (
+        <></>
+      )}
     </div>
   )
 }

@@ -18,22 +18,11 @@ const Header = () => {
   const { userInfo } = userLogin
   let navigate = useNavigate()
   let dispatch = useDispatch()
+
   return (
     <div>
       <nav className='navbar navbar-expand-lg navbar-light bg-light '>
         <div className='container-fluid'>
-          <button
-            className='navbar-toggler'
-            type='button'
-            data-bs-toggle='collapse'
-            data-bs-target='#navbarColor03'
-            aria-controls='navbarColor03'
-            aria-expanded='false'
-            aria-label='Toggle navigation'
-          >
-            <span className='navbar-toggler-icon'></span>
-          </button>
-
           {userInfo ? (
             <Row>
               <Col
@@ -107,7 +96,8 @@ const Header = () => {
                 <></>
               )}
 
-              {userInfo.department === 'admin' ? (
+              {userInfo.department === 'admin' ||
+              userInfo.name === 'العميد /  ياسر فاروق' ? (
                 <Col onClick={() => navigate('/log')}>
                   <Row>
                     <span className='text-center'>

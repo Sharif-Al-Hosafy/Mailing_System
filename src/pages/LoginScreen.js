@@ -39,7 +39,6 @@ const LoginScreen = () => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    console.log(username, password)
     dispatch(login(username, password))
     postLog(username, 'دخول', '-')
   }
@@ -69,7 +68,9 @@ const LoginScreen = () => {
                   >
                     <option value={''}>{}</option>
                     {deps.map((dep) => (
-                      <option value={dep.dep_name}>{dep.dep_name}</option>
+                      <option key={dep.dep_name} value={dep.dep_name}>
+                        {dep.dep_name}
+                      </option>
                     ))}
                   </Form.Select>
                 </Col>
@@ -81,7 +82,9 @@ const LoginScreen = () => {
                   >
                     <option value={''}>{''}</option>
                     {users.map((user) => (
-                      <option value={user.username}>{user.username}</option>
+                      <option key={user.username} value={user.username}>
+                        {user.username}
+                      </option>
                     ))}
                   </Form.Select>
                 </Col>

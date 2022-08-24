@@ -24,8 +24,8 @@ const fileListExp = async (req, res) => {
 }
 
 const fileToDailyScreenImp = async (req, res) => {
-  let queryString = `insert into mail_system.file (file_no, file_data, orgname, summary) 
-  select imd.id,imf.pdffile,imd.orgname,imd.summary from archieve.importdata imd
+  let queryString = `insert into mail_system.file (file_no, file_data, orgname, summary,date) 
+  select imd.id,imf.pdffile,imd.orgname,imd.summary,current_date() from archieve.importdata imd
   join archieve.importfile imf 
   on imd.id = imf.id
   where imd.id = "${req.params.fileId}";`
@@ -50,8 +50,8 @@ const fileToDailyScreenImp = async (req, res) => {
 }
 
 const fileToDailyScreenExp = async (req, res) => {
-  let queryString = `insert into mail_system.file (file_no, file_data, orgname, summary) 
-  select emd.id,emf.pdffile,emd.orgname,emd.summary from archieve.exportdata emd
+  let queryString = `insert into mail_system.file (file_no, file_data, orgname, summary,date) 
+  select emd.id,emf.pdffile,emd.orgname,emd.summary,current_date() from archieve.exportdata emd
   join archieve.exportfile emf 
   on emd.id = emf.id
   where emd.id = '${req.params.fileId}';`

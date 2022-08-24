@@ -164,6 +164,7 @@ const AddScreen = () => {
                                           alert('تم إرسال المكاتبة')
                                           navigate('/daily')
                                           handleClose()
+                                          window.location.reload(false)
                                         }}
                                       >
                                         تأكيد الإرسال
@@ -176,7 +177,6 @@ const AddScreen = () => {
                                 <Button
                                   variant='info'
                                   onClick={() => {
-                                    console.log(el)
                                     getData(el.id)
                                     postLog(
                                       userInfo.name,
