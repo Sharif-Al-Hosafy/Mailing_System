@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>PDF Annotation And Drawing Markup Plugin Example</title>
+    <link rel="stylesheet" href="../bootstrap.min2.css">
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -18,7 +19,7 @@
     />
     <style>
       body {
-        background-color: rgb(82, 86, 89);
+        background-color: rgb(24, 75, 95);
       }
 
       canvas,
@@ -30,7 +31,7 @@
 
       .toolbar {
         width: 100%;
-        background-color: rgb(50, 54, 57);
+        background-color: whitesmoke;
         height: 50px;
         position: fixed;
         top: 0;
@@ -116,10 +117,8 @@
   </head>
   <body>
     <div class="toolbar">
-      <div class="tool">
-        <span style="color: red">منظومة البريد</span>
-      </div>
-      <div class="tool">
+      
+      <!-- <div class="tool">
         <input
           type="number"
           class="form-control text-right"
@@ -128,6 +127,12 @@
           max="50"
         />
         <label for="">حجم القلم</label>
+      </div> -->
+      <div class="tool">
+        <button class="color-tool active" style="background-color: #212121"></button>
+        <button class="color-tool" style="background-color: red"></button>
+        <button class="color-tool" style="background-color: blue"></button>
+        <button class="color-tool" style="background-color: green"></button>
       </div>
       <div class="tool">
         <select id="font-size" class="form-control">
@@ -142,28 +147,16 @@
           <option value="72">72</option>
           <option value="108">108</option>
         </select>
-        <label for="">حجم الخط</label>
+        <label style="color:black" for="">حجم الخط</label>
       </div>
       <div class="tool">
-        <button
-          class="color-tool active"
-          style="background-color: #212121"
-        ></button>
-        <button class="color-tool" style="background-color: red"></button>
-        <button class="color-tool" style="background-color: blue"></button>
-        <button class="color-tool" style="background-color: green"></button>
-        <button class="color-tool" style="background-color: yellow"></button>
-      </div>
-      <div class="tool">
-        <button class="tool-button active">
-          <i
-            class="fa fa-hand-paper-o"
-            title="Free Hand"
-            onclick="enableSelector(event)"
-          ></i>
+        <button onclick="enableAddText(event)" class="tool-button">
+          ملاحظات        
         </button>
       </div>
-      <div class="tool">
+      
+      
+      <!-- <div class="tool">
         <button class="tool-button">
           <i
             class="fa fa-pencil"
@@ -171,17 +164,9 @@
             onclick="enablePencil(event)"
           ></i>
         </button>
-      </div>
-      <div class="tool">
-        <button class="tool-button">
-          <i
-            class="fa fa-font"
-            title="Add Text"
-            onclick="enableAddText(event)"
-          ></i>
-        </button>
-      </div>
-      <div class="tool">
+      </div> -->
+      
+      <!-- <div class="tool">
         <button class="tool-button">
           <i
             class="fa fa-long-arrow-right"
@@ -189,23 +174,16 @@
             onclick="enableAddArrow(event)"
           ></i>
         </button>
-      </div>
+      </div> -->
+      
       <div class="tool">
-        <button class="tool-button">
-          <i
-            class="fa fa-square-o"
-            title="Add rectangle"
-            onclick="enableRectangle(event)"
-          ></i>
+        <button onclick="addImage(event)" class="tool-button">
+          توقيع / تأشيرة
         </button>
       </div>
       <div class="tool">
-        <button class="tool-button">
-          <i
-            class="fa fa-picture-o"
-            title="Add an Image"
-            onclick="addImage(event)"
-          ></i>
+        <button class="tool-button active">
+          <i class="fa fa-hand-paper-o" title="Free Hand" onclick="enableSelector(event)"></i>
         </button>
       </div>
       <div class="tool">
@@ -221,9 +199,7 @@
           إلغاء التعديلات
         </button>
       </div>
-      <div class="tool">
-        <button class="btn btn-info btn-sm" onclick="showPdfData()">{}</button>
-      </div>
+      
       <div class="tool">
         <button
           style="background-color: lightgreen; color: black"
@@ -699,6 +675,7 @@
           }
         })
         alert("تم حفظ التعديل")
+        window.close()
       }
 
       PDFAnnotate.prototype.setBrushSize = function (size) {

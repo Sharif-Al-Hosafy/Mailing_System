@@ -1,23 +1,23 @@
-import React from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFileCirclePlus,
   faArrowRightFromBracket,
   faUserPlus,
   faHouse,
   faBook,
-} from '@fortawesome/free-solid-svg-icons'
-import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { logout } from '../actions/userActions'
-import { Col, Row } from 'reactstrap'
-import { postLog } from '../logger'
+} from '@fortawesome/free-solid-svg-icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../actions/userActions';
+import { Col, Row } from 'reactstrap';
+import { postLog } from '../logger';
 
 const Header = () => {
-  const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
-  let navigate = useNavigate()
-  let dispatch = useDispatch()
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  let navigate = useNavigate();
+  let dispatch = useDispatch();
 
   return (
     <div>
@@ -27,8 +27,9 @@ const Header = () => {
             <Row>
               <Col
                 onClick={() => {
-                  dispatch(logout())
-                  postLog(userInfo.name, 'خروج', '-')
+                  dispatch(logout());
+                  postLog(userInfo.name, 'خروج', '-');
+                  navigate('/');
                 }}
               >
                 <Row>
@@ -135,7 +136,7 @@ const Header = () => {
         </div>
       </nav>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

@@ -1,6 +1,6 @@
 const mysql = require("mysql2");
 const util = require("util");
-var connection = mysql.createConnection({
+var connection = mysql.createPool({
   // host: process.env.DB_HOST,
   // user: process.env.DB_USER_NM,
   // port: process.env.DB_PORT,
@@ -16,7 +16,7 @@ var connection = mysql.createConnection({
 connection.query = util.promisify(connection.query).bind(connection);
 
 // connect to the database
-connection.connect(function (err) {
+connection.getConnection(function (err) {
   if (err) {
     console.log("error connecting: " + err.stack);
     return;

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import {
   Modal,
   Form,
@@ -10,62 +10,62 @@ import {
   Table,
   Tab,
   Tabs,
-} from 'react-bootstrap'
-import { useSelector } from 'react-redux'
-import notificationSound from '../notification.wav'
-import { postLog } from '../logger'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faXmark } from '@fortawesome/free-solid-svg-icons'
+} from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import notificationSound from '../notification.wav';
+import { postLog } from '../logger';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 const DailyScreen = () => {
   //vars
-  let cnt = 0
-  let cnt2 = 0
+  let cnt = 0;
+  let cnt2 = 0;
   //states
-  const audioPlayer = useRef(null)
-  const [docs, setDocs] = useState([])
-  const [sent, setSent] = useState([])
-  const [show, setShow] = useState(false)
-  const [confirm, setConfirm] = useState(false)
-  const [checkedState, setCheckedState] = useState(new Array(8).fill(false))
-  const [selectedFile, setSelectedFile] = useState()
+  const audioPlayer = useRef(null);
+  const [docs, setDocs] = useState([]);
+  const [sent, setSent] = useState([]);
+  const [show, setShow] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [checkedState, setCheckedState] = useState(new Array(8).fill(false));
+  const [selectedFile, setSelectedFile] = useState();
   //other hooks
-  let navigate = useNavigate()
-  const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
+  let navigate = useNavigate();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
   //methods
-  const handleClose = () => setShow(false)
-  const handleConfirmClose = () => setConfirm(false)
-  const handleShow = () => setShow(true)
+  const handleClose = () => setShow(false);
+  const handleConfirmClose = () => setConfirm(false);
+  const handleShow = () => setShow(true);
   const handleConfirmShow = () => {
-    setConfirm(true)
-  }
+    setConfirm(true);
+  };
   const setRead = async (depID) => {
-    audioPlayer.current.play()
-    await axios.post(`/api/v1/files/notify/${depID}`)
-    Notification.requestPermission()
-    new Notification('تم إرسال مكاتبة جديدة')
-  }
+    audioPlayer.current.play();
+    await axios.post(`/api/v1/files/notify/${depID}`);
+    Notification.requestPermission();
+    new Notification('تم إرسال مكاتبة جديدة');
+  };
 
   const setReadColor = async (fileID, depID) => {
-    await axios.post(`/api/v1/files/read/${fileID}/${depID}`)
-  }
+    await axios.post(`/api/v1/files/read/${fileID}/${depID}`);
+  };
 
   const removeDoc = async (fileId, depId) => {
-    await axios.delete(`/api/v1/files/remove/${fileId}/${depId}`)
-  }
+    await axios.delete(`/api/v1/files/remove/${fileId}/${depId}`);
+  };
 
   let getData = async (id) => {
-    await axios.get(`/api/v1/files/open/${id}`)
-  }
+    await axios.get(`/api/v1/files/open/${id}`);
+  };
 
   const handleOnChange = (position) => {
     const updatedCheckedState = checkedState.map((perm, index) =>
       index === position ? !perm : perm
-    )
+    );
 
-    setCheckedState(updatedCheckedState)
-  }
+    setCheckedState(updatedCheckedState);
+  };
 
   const submitHandler = (e) => {
     axios
@@ -73,41 +73,41 @@ const DailyScreen = () => {
         checkedState,
         selectedFile: selectedFile.file_no,
       })
-      .then((res) => {})
-    setSelectedFile()
-  }
+      .then((res) => {});
+    setSelectedFile();
+  };
 
   useEffect(() => {
     const fetchDocs = () => {
       axios
         .get(`/api/v1/files/daily/show/${userInfo.dep_id}`)
         .then(async (res) => {
-          setDocs(res.data)
+          setDocs(res.data);
           for (let i = 0; i < res.data.length; i++) {
             if (res.data[i].notify === 1) {
-              await setRead(userInfo.dep_id)
+              await setRead(userInfo.dep_id);
             }
           }
-        })
-    }
+        });
+    };
 
     const fetchSent = () => {
       axios
         .get(`/api/v1/files/daily/sent/${userInfo.dep_id}`)
         .then(async (res) => {
-          setSent(res.data)
-        })
-    }
+          setSent(res.data);
+        });
+    };
 
-    fetchSent()
-    fetchDocs()
+    fetchSent();
+    fetchDocs();
 
     const interval = setInterval(() => {
-      fetchDocs()
-    }, 3000)
+      fetchDocs();
+    }, 3000);
 
-    return () => clearInterval(interval)
-  }, [userInfo.dep_id])
+    return () => clearInterval(interval);
+  }, [userInfo.dep_id]);
 
   return (
     <div>
@@ -123,6 +123,7 @@ const DailyScreen = () => {
                   <Table className='table table-hover '>
                     <thead>
                       <tr>
+                        <th scope='col'></th>
                         <th scope='col'></th>
                         <th scope='col'>الملخص</th>
                         <th scope='col'>اسم المكاتبة</th>
@@ -144,8 +145,8 @@ const DailyScreen = () => {
                               color='red'
                               icon={faXmark}
                               onClick={() => {
-                                setSelectedFile(el)
-                                handleConfirmShow()
+                                setSelectedFile(el);
+                                handleConfirmShow();
                               }}
                             />
                           </td>
@@ -154,11 +155,11 @@ const DailyScreen = () => {
                             userInfo.department === 'نائب المدير العام' ||
                             userInfo.department === 'سكرتير المدير العام' ? (
                               <Button
-                                className='m-1'
+                                className='mx-1'
                                 variant='success'
                                 onClick={() => {
-                                  handleShow()
-                                  setSelectedFile(el)
+                                  handleShow();
+                                  setSelectedFile(el);
                                 }}
                               >
                                 ارسال
@@ -168,16 +169,17 @@ const DailyScreen = () => {
                             )}
 
                             <Button
+                              className='mx-1'
                               variant='info'
                               onClick={() => {
-                                getData(el.file_no)
-                                setReadColor(el.file_no, userInfo.dep_id)
+                                getData(el.file_no);
+                                setReadColor(el.file_no, userInfo.dep_id);
                                 postLog(
                                   userInfo.name,
                                   'عرض مكاتبة',
                                   el.orgname + ' ' + el.file_no
-                                )
-                                navigate(`/doc`)
+                                );
+                                navigate(`/doc`);
                               }}
                             >
                               عرض
@@ -185,19 +187,20 @@ const DailyScreen = () => {
                             {userInfo.department === 'المدير العام' ||
                             userInfo.department === 'نائب المدير العام' ? (
                               <Button
+                                className='mx-1'
                                 variant='warning'
                                 onClick={() => {
-                                  getData(el.file_no)
-                                  setReadColor(el.file_no, userInfo.dep_id)
+                                  getData(el.file_no);
+                                  setReadColor(el.file_no, userInfo.dep_id);
                                   postLog(
                                     userInfo.name,
                                     'حذف مكاتبة',
                                     el.orgname + ' ' + el.file_no
-                                  )
+                                  );
                                   window.open(
                                     //change this
-                                    'http://192.168.1.201:5000/api/v1/files/editor'
-                                  )
+                                    'http://localhost:5000/api/v1/files/editor'
+                                  );
                                 }}
                               >
                                 التوقيع
@@ -240,14 +243,14 @@ const DailyScreen = () => {
                             <Button
                               variant='info'
                               onClick={() => {
-                                getData(el.file_no)
-                                setReadColor(el.file_no, userInfo.dep_id)
+                                getData(el.file_no);
+                                setReadColor(el.file_no, userInfo.dep_id);
                                 postLog(
                                   userInfo.name,
                                   'عرض مكاتبة',
                                   el.orgname + ' ' + el.file_no
-                                )
-                                navigate(`/doc`)
+                                );
+                                navigate(`/doc`);
                               }}
                             >
                               عرض
@@ -409,13 +412,13 @@ const DailyScreen = () => {
               type='submit'
               variant='success'
               onClick={() => {
-                handleClose()
+                handleClose();
                 postLog(
                   userInfo.name,
                   'إرسال مكاتبة',
                   selectedFile.orgname + ' ' + selectedFile.file_no
-                )
-                removeDoc(selectedFile.file_no, userInfo.dep_id)
+                );
+                removeDoc(selectedFile.file_no, userInfo.dep_id);
               }}
             >
               إرسال
@@ -440,7 +443,7 @@ const DailyScreen = () => {
             <Button
               variant='danger'
               onClick={() => {
-                handleConfirmClose()
+                handleConfirmClose();
               }}
             >
               غلق
@@ -448,15 +451,15 @@ const DailyScreen = () => {
             <Button
               variant='success'
               onClick={() => {
-                removeDoc(selectedFile.file_no, selectedFile.dep_id)
+                removeDoc(selectedFile.file_no, selectedFile.dep_id);
 
                 postLog(
                   userInfo.name,
                   'اضافة مكاتبة',
                   selectedFile.orgname + ' ' + selectedFile.file_no
-                )
+                );
 
-                handleConfirmClose()
+                handleConfirmClose();
               }}
             >
               تأكيد الحذف
@@ -467,7 +470,7 @@ const DailyScreen = () => {
         <></>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default DailyScreen
+export default DailyScreen;
