@@ -1,9 +1,9 @@
-const jwt = require('jsonwebtoken');
-const err = require('../../utils/createError');
-const db = require('../../config/db');
-const { Buffer } = require('buffer');
-const fs = require('fs');
-const path = require('path');
+const jwt = require("jsonwebtoken");
+const err = require("../../utils/createError");
+const db = require("../../config/db");
+const { Buffer } = require("buffer");
+const fs = require("fs");
+const path = require("path");
 let staticID;
 const fileListImp = async (req, res) => {
   let queryString = `select id,orgname,importid,summary,importdate from archieve.importdata where importid = ${req.params.id} ORDER BY importdate DESC;`;
@@ -11,7 +11,7 @@ const fileListImp = async (req, res) => {
     throw err;
   });
 
-  if (file.length == 0) throw err(404, 'لا يوجد مكاتبة بهذا الرقم');
+  if (file.length == 0) throw err(404, "لا يوجد مكاتبة بهذا الرقم");
   res.status(200).json(file);
 };
 
@@ -20,7 +20,7 @@ const fileListExp = async (req, res) => {
   const file = await db.query(queryString).catch((err) => {
     throw err;
   });
-  if (file.length == 0) throw err(404, 'لا يوجد مكاتبة بهذا الرقم');
+  if (file.length == 0) throw err(404, "لا يوجد مكاتبة بهذا الرقم");
   res.status(200).json(file);
 };
 
@@ -36,14 +36,14 @@ const fileToDailyScreenImp = async (req, res) => {
 
   let qInsertion = `insert into mail_system.filesent (file_id, dep_id) values ("${
     req.params.fileId
-  }",${5});`;
+  }",${4});`;
   const insertion = await db.query(qInsertion).catch((err) => {
     throw err;
   });
 
   let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify,notify_color) values ("${
     req.params.fileId
-  }",${8},${1},${1});`;
+  }",${3},${1},${1});`;
   const file2 = await db.query(queryString2).catch((err) => {
     throw err;
   });
@@ -60,14 +60,14 @@ const fileToDailyScreenExp = async (req, res) => {
     throw err;
   });
 
-  let qInsertion = `insert into mail_system.filesent (file_id, dep_id) values ('${req.params.fileId}',5);`;
+  let qInsertion = `insert into mail_system.filesent (file_id, dep_id) values ('${req.params.fileId}',4);`;
   const insertion = await db.query(qInsertion).catch((err) => {
     throw err;
   });
 
   let queryString2 = `insert into mail_system.dep_file (file_id,dep_id,notify,notify_color) values ("${
     req.params.fileId
-  }",${8},${1},${1});`;
+  }",${3},${1},${1});`;
   const file2 = await db.query(queryString2).catch((err) => {
     throw err;
   });
@@ -82,8 +82,8 @@ const openFile = async (req, res) => {
 
   staticID = req.params.fileId;
   let buff = file[0].file_data;
-  fs.writeFileSync('../../src/pages/sample.pdf', buff, {
-    encoding: 'ascii',
+  fs.writeFileSync("sample.pdf", buff, {
+    encoding: "ascii",
   });
 
   return res.status(200).json({ buff });
@@ -91,8 +91,8 @@ const openFile = async (req, res) => {
 
 const showFileSearch = async (req, res) => {
   let fileType;
-  if (req.params.fileId.includes('و')) fileType = 'importfile';
-  else fileType = 'exportfile';
+  if (req.params.fileId.includes("و")) fileType = "importfile";
+  else fileType = "exportfile";
 
   let queryString = `select pdffile from archieve.${fileType} where id='${req.params.fileId}';`;
   const file = await db.query(queryString).catch((err) => {
@@ -100,8 +100,8 @@ const showFileSearch = async (req, res) => {
   });
   staticID = req.params.fileId;
   let buff = file[0].pdffile;
-  fs.writeFileSync('../../src/pages/sample.pdf', buff, {
-    encoding: 'ascii',
+  fs.writeFileSync("sample.pdf", buff, {
+    encoding: "ascii",
   });
 
   return res.status(200).json({ buff });
@@ -122,12 +122,12 @@ const sendFiles = async (req, res) => {
     });
   });
 
-  res.status(200).json({ message: 'success' });
+  res.status(200).json({ message: "success" });
 };
 
 const showDailyDocuments = async (req, res) => {
   let dep_id = req.params.id;
-  let queryString = ` SELECT file_no,file_data,orgname,summary,id,dep_id, notify,notify_color FROM mail_system.file f join mail_system.dep_file on file_no = file_id  where dep_id = ${dep_id} order by id desc;`;
+  let queryString = ` SELECT file_no,file_data,orgname,summary,id,dep_id, notify,notify_color,date FROM mail_system.file f join mail_system.dep_file on file_no = file_id  where dep_id = ${dep_id} order by id desc;`;
   const files = await db.query(queryString).catch((err) => {
     throw err;
   });
@@ -152,7 +152,18 @@ const docTotal = async (req, res) => {
 };
 
 const getPdfEditor = (req, res) => {
-  fs.readFile('../../src/pages/DocScreen.html', 'utf8', (err, data) => {
+  fs.readFile(__dirname + "/DocScreen.html", "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    res.send(data);
+  });
+};
+
+const getPdfViewer = (req, res) => {
+  //"../../src/pages/ViewScreen.html" dev
+  fs.readFile("../../src/pages/ViewScreen.html", "utf8", (err, data) => {
     if (err) {
       console.error(err);
       return;
@@ -162,7 +173,7 @@ const getPdfEditor = (req, res) => {
 };
 
 const getPdf = (req, res) => {
-  fs.readFile('../../src/pages/sample.pdf', (err, data) => {
+  fs.readFile("sample.pdf", (err, data) => {
     if (err) {
       console.error(err);
       return;
@@ -176,7 +187,7 @@ const messageIsSent = async (req, res) => {
   const docsNo = await db.query(queryString).catch((err) => {
     throw err;
   });
-  res.status(200).json({ message: 'success' });
+  res.status(200).json({ message: "success" });
 };
 //file_id = '${req.params.fileId}'
 const messageIsRead = async (req, res) => {
@@ -184,11 +195,11 @@ const messageIsRead = async (req, res) => {
   const docsNo = await db.query(queryString).catch((err) => {
     throw err;
   });
-  res.status(200).json({ message: 'success' });
+  res.status(200).json({ message: "success" });
 };
 
 const savePdf = async (req, res) => {
-  let data = new Buffer.from(req.body.body, 'binary');
+  let data = new Buffer.from(req.body.body, "binary");
   var query = ` update mail_system.file SET ? where file_no='${staticID}'`,
     values = {
       file_data: data,
@@ -208,7 +219,15 @@ const removeOnSend = async (req, res) => {
   const deletion = await db.query(query).catch((err) => {
     throw err;
   });
-  res.status(201).json({ message: 'success' });
+  res.status(201).json({ message: "success" });
+};
+
+const weeklyTruncate = async (req, res) => {
+  let queryString = `delete from mail_system.file where date < now() - interval 7 DAY;`;
+  const Trunc = await db.query(queryString).catch((err) => {
+    throw err;
+  });
+  res.status(200).json({ message: "success" });
 };
 module.exports = {
   fileToDailyScreenImp,
@@ -227,4 +246,6 @@ module.exports = {
   removeOnSend,
   showFileSearch,
   showSentDocs,
+  getPdfViewer,
+  weeklyTruncate,
 };

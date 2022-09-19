@@ -125,7 +125,10 @@ const Header = () => {
             <ul className='navbar-nav ms-auto'>
               <div className='mx-3'>
                 {userInfo ? (
-                  <h5>{userInfo.department + ' / ' + userInfo.name}</h5>
+                  <>
+                  <h4>{userInfo.department}</h4>
+                  <h5 style={{textAlign:"right"}}>{userInfo.name}</h5>
+                  </>
                 ) : (
                   <></>
                 )}

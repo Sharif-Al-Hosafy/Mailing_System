@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   Modal,
   Form,
@@ -10,12 +10,12 @@ import {
   Table,
   Tab,
   Tabs,
-} from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import notificationSound from '../notification.wav';
-import { postLog } from '../logger';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+} from "react-bootstrap";
+import { useSelector } from "react-redux";
+import notificationSound from "../notification.wav";
+import { postLog } from "../logger";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const DailyScreen = () => {
   //vars
@@ -27,7 +27,7 @@ const DailyScreen = () => {
   const [sent, setSent] = useState([]);
   const [show, setShow] = useState(false);
   const [confirm, setConfirm] = useState(false);
-  const [checkedState, setCheckedState] = useState(new Array(8).fill(false));
+  const [checkedState, setCheckedState] = useState(new Array(13).fill(false));
   const [selectedFile, setSelectedFile] = useState();
   //other hooks
   let navigate = useNavigate();
@@ -44,7 +44,7 @@ const DailyScreen = () => {
     audioPlayer.current.play();
     await axios.post(`/api/v1/files/notify/${depID}`);
     Notification.requestPermission();
-    new Notification('تم إرسال مكاتبة جديدة');
+    new Notification("تم إرسال مكاتبة جديدة");
   };
 
   const setReadColor = async (fileID, depID) => {
@@ -65,11 +65,12 @@ const DailyScreen = () => {
     );
 
     setCheckedState(updatedCheckedState);
+    console.log(checkedState);
   };
 
   const submitHandler = (e) => {
     axios
-      .post('/api/v1/files/send', {
+      .post("/api/v1/files/send", {
         checkedState,
         selectedFile: selectedFile.file_no,
       })
@@ -111,23 +112,23 @@ const DailyScreen = () => {
 
   return (
     <div>
-      <h1 className='text-center my-5 title'>المكاتبات اليومية</h1>
+      <h1 className="text-center my-5 title">المكاتبات اليومية</h1>
 
       <audio ref={audioPlayer} src={notificationSound} />
-      <Container className='text-center'>
-        <Tabs defaultActiveKey='home' id='uncontrolled-tab-example'>
-          <Tab eventKey='home' title='البريد الوارد'>
-            <Card className='p-3'>
+      <Container className="text-center">
+        <Tabs defaultActiveKey="home" id="uncontrolled-tab-example">
+          <Tab eventKey="home" title="البريد الوارد">
+            <Card className="p-3">
               <Container>
                 {docs.length ? (
-                  <Table className='table table-hover '>
+                  <Table className="table table-hover ">
                     <thead>
                       <tr>
-                        <th scope='col'></th>
-                        <th scope='col'></th>
-                        <th scope='col'>الملخص</th>
-                        <th scope='col'>اسم المكاتبة</th>
-                        <th scope='col'>م</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col">الملخص</th>
+                        <th scope="col">اسم المكاتبة</th>
+                        <th scope="col">م</th>
                       </tr>
                     </thead>
 
@@ -136,13 +137,13 @@ const DailyScreen = () => {
                         <tr
                           key={cnt}
                           className={`docTable ${
-                            el.notify_color ? 'unread' : <></>
+                            el.notify_color ? "unread" : <></>
                           }`}
                         >
                           <td>
                             <FontAwesomeIcon
-                              className='clickable m-3'
-                              color='red'
+                              className="clickable m-3"
+                              color="red"
                               icon={faXmark}
                               onClick={() => {
                                 setSelectedFile(el);
@@ -150,16 +151,17 @@ const DailyScreen = () => {
                               }}
                             />
                           </td>
-                          <td style={{ width: '30%' }}>
-                            {userInfo.department === 'المدير العام' ||
-                            userInfo.department === 'نائب المدير العام' ||
-                            userInfo.department === 'سكرتير المدير العام' ? (
+                          <td style={{ width: "30%" }}>
+                            {userInfo.department === "المدير العام" ||
+                            userInfo.department === "نائب المدير العام" ||
+                            userInfo.department === "سكرتير المدير العام" ? (
                               <Button
-                                className='mx-1'
-                                variant='success'
+                                className="mx-1"
+                                variant="success"
                                 onClick={() => {
                                   handleShow();
                                   setSelectedFile(el);
+                                  console.log(el);
                                 }}
                               >
                                 ارسال
@@ -169,37 +171,40 @@ const DailyScreen = () => {
                             )}
 
                             <Button
-                              className='mx-1'
-                              variant='info'
+                              className="mx-1"
+                              variant="info"
                               onClick={() => {
                                 getData(el.file_no);
                                 setReadColor(el.file_no, userInfo.dep_id);
                                 postLog(
                                   userInfo.name,
-                                  'عرض مكاتبة',
-                                  el.orgname + ' ' + el.file_no
+                                  "عرض مكاتبة",
+                                  el.orgname + " " + el.file_no
                                 );
-                                navigate(`/doc`);
+                                window.open(
+                                  //change this
+                                  "http://localhost:5000/api/v1/files/viewer"
+                                );
                               }}
                             >
                               عرض
                             </Button>
-                            {userInfo.department === 'المدير العام' ||
-                            userInfo.department === 'نائب المدير العام' ? (
+                            {userInfo.department === "المدير العام" ||
+                            userInfo.department === "نائب المدير العام" ? (
                               <Button
-                                className='mx-1'
-                                variant='warning'
+                                className="mx-1"
+                                variant="warning"
                                 onClick={() => {
                                   getData(el.file_no);
                                   setReadColor(el.file_no, userInfo.dep_id);
                                   postLog(
                                     userInfo.name,
-                                    'حذف مكاتبة',
-                                    el.orgname + ' ' + el.file_no
+                                    "حذف مكاتبة",
+                                    el.orgname + " " + el.file_no
                                   );
                                   window.open(
                                     //change this
-                                    'http://localhost:5000/api/v1/files/editor'
+                                    "http://localhost:5000/api/v1/files/editor"
                                   );
                                 }}
                               >
@@ -209,9 +214,9 @@ const DailyScreen = () => {
                               <></>
                             )}
                           </td>
-                          <td style={{ width: '30%' }}>{el.summary}</td>
-                          <td style={{ width: '30%' }}>{el.orgname}</td>
-                          <td style={{ width: '10%' }}>{++cnt}</td>
+                          <td style={{ width: "30%" }}>{el.summary}</td>
+                          <td style={{ width: "30%" }}>{el.orgname}</td>
+                          <td style={{ width: "10%" }}>{++cnt}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -222,33 +227,33 @@ const DailyScreen = () => {
               </Container>
             </Card>
           </Tab>
-          <Tab eventKey='sent' title='البريدالمُرسَل'>
-            <Card className='p-3'>
+          <Tab eventKey="sent" title="البريدالمُرسَل">
+            <Card className="p-3">
               <Container>
                 {sent.length ? (
-                  <Table className='table table-hover '>
+                  <Table className="table table-hover ">
                     <thead>
                       <tr>
-                        <th scope='col'></th>
-                        <th scope='col'>الملخص</th>
-                        <th scope='col'>اسم المكاتبة</th>
-                        <th scope='col'>م</th>
+                        <th scope="col"></th>
+                        <th scope="col">الملخص</th>
+                        <th scope="col">اسم المكاتبة</th>
+                        <th scope="col">م</th>
                       </tr>
                     </thead>
 
                     <tbody>
                       {sent.map((el) => (
-                        <tr key={cnt2} className='docTable'>
+                        <tr key={cnt2} className="docTable">
                           <td>
                             <Button
-                              variant='info'
+                              variant="info"
                               onClick={() => {
                                 getData(el.file_no);
                                 setReadColor(el.file_no, userInfo.dep_id);
                                 postLog(
                                   userInfo.name,
-                                  'عرض مكاتبة',
-                                  el.orgname + ' ' + el.file_no
+                                  "عرض مكاتبة",
+                                  el.orgname + " " + el.file_no
                                 );
                                 navigate(`/doc`);
                               }}
@@ -256,9 +261,9 @@ const DailyScreen = () => {
                               عرض
                             </Button>
                           </td>
-                          <td style={{ width: '30%' }}>{el.summary}</td>
-                          <td style={{ width: '30%' }}>{el.orgname}</td>
-                          <td style={{ width: '10%' }}>{++cnt2}</td>
+                          <td style={{ width: "30%" }}>{el.summary}</td>
+                          <td style={{ width: "30%" }}>{el.orgname}</td>
+                          <td style={{ width: "10%" }}>{++cnt2}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -274,7 +279,7 @@ const DailyScreen = () => {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title style={{ alignItems: 'center' }}>
+          <Modal.Title style={{ alignItems: "center" }}>
             الأقسام المرسل إليها
           </Modal.Title>
         </Modal.Header>
@@ -285,27 +290,27 @@ const DailyScreen = () => {
                 <div>
                   <Form.Check
                     inline
-                    type='checkbox'
-                    label='الإدارة القانونية'
-                    style={{ marginRight: '28px' }}
+                    type="checkbox"
+                    label="المدير العام"
+                    style={{ marginRight: "59px" }}
                     checked={checkedState[1]}
                     onChange={() => handleOnChange(1)}
                     disabled={
-                      userInfo.department === 'المدير العام' ||
-                      userInfo.department === 'نائب المدير العام'
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
                         ? true
                         : false
                     }
                   />
                   <Form.Check
                     inline
-                    type='checkbox'
-                    label='التخطيط و المتابعة'
+                    type="checkbox"
+                    label="نائب المدير العام"
                     checked={checkedState[2]}
                     onChange={() => handleOnChange(2)}
                     disabled={
-                      userInfo.department === 'المدير العام' ||
-                      userInfo.department === 'نائب المدير العام'
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
                         ? true
                         : false
                     }
@@ -314,27 +319,26 @@ const DailyScreen = () => {
                 <div>
                   <Form.Check
                     inline
-                    type='checkbox'
-                    label='قسم العقود'
-                    style={{ marginRight: '46px' }}
+                    type="checkbox"
+                    label="سكرتير المدير العام"
+                    style={{ marginRight: "0 px" }}
                     checked={checkedState[3]}
                     onChange={() => handleOnChange(3)}
                     disabled={
-                      userInfo.department === 'المدير العام' ||
-                      userInfo.department === 'نائب المدير العام'
+                      userInfo.department === "سكرتير المدير العام"
                         ? true
                         : false
                     }
                   />
                   <Form.Check
                     inline
-                    type='checkbox'
-                    label='الإدارة المالية'
+                    type="checkbox"
+                    label="الأرشيف العام"
                     checked={checkedState[4]}
                     onChange={() => handleOnChange(4)}
                     disabled={
-                      userInfo.department === 'المدير العام' ||
-                      userInfo.department === 'نائب المدير العام'
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
                         ? true
                         : false
                     }
@@ -343,27 +347,27 @@ const DailyScreen = () => {
                 <div>
                   <Form.Check
                     inline
-                    type='checkbox'
-                    label='الأرشيف العام'
-                    style={{ marginRight: '34px' }}
+                    type="checkbox"
+                    label="الإدارة القانونية"
+                    style={{ marginRight: "38px" }}
                     checked={checkedState[5]}
                     onChange={() => handleOnChange(5)}
                     disabled={
-                      userInfo.department === 'المدير العام' ||
-                      userInfo.department === 'نائب المدير العام'
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
                         ? true
                         : false
                     }
                   />
                   <Form.Check
                     inline
-                    type='checkbox'
-                    label='المدير العام'
+                    type="checkbox"
+                    label="إدارة التخطيط و المتابعة / الإدارة الفنية"
                     checked={checkedState[6]}
                     onChange={() => handleOnChange(6)}
                     disabled={
-                      userInfo.department === 'المدير العام' ||
-                      userInfo.department === 'نائب المدير العام'
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
                         ? true
                         : false
                     }
@@ -372,26 +376,86 @@ const DailyScreen = () => {
                 <div>
                   <Form.Check
                     inline
-                    type='checkbox'
-                    label='نائب المدير العام'
+                    type="checkbox"
+                    label="الإدارة المالية"
+                    style={{ marginRight: "50px" }}
                     checked={checkedState[7]}
                     onChange={() => handleOnChange(7)}
                     disabled={
-                      userInfo.department === 'المدير العام' ||
-                      userInfo.department === 'نائب المدير العام'
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
                         ? true
                         : false
                     }
                   />
                   <Form.Check
                     inline
-                    type='checkbox'
-                    label='سكرتير المدير العام'
+                    type="checkbox"
+                    label="إدارة العقود"
                     checked={checkedState[8]}
                     onChange={() => handleOnChange(8)}
                     disabled={
-                      userInfo.department === 'سكرتير المدير العام' ||
-                      userInfo.department === 'نائب المدير العام'
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+                <div>
+                  <Form.Check
+                    inline
+                    type="checkbox"
+                    label="إدارة الأمن"
+                    style={{ marginRight: "67px" }}
+                    checked={checkedState[9]}
+                    onChange={() => handleOnChange(9)}
+                    disabled={
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
+                        ? true
+                        : false
+                    }
+                  />
+                  <Form.Check
+                    inline
+                    type="checkbox"
+                    label="الشئون الإدارية"
+                    checked={checkedState[10]}
+                    onChange={() => handleOnChange(10)}
+                    disabled={
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
+                        ? true
+                        : false
+                    }
+                  />
+                </div>
+
+                <div>
+                  <Form.Check
+                    inline
+                    type="checkbox"
+                    label="إدارة التسويق"
+                    style={{ marginRight: "46px" }}
+                    checked={checkedState[11]}
+                    onChange={() => handleOnChange(11)}
+                    disabled={
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
+                        ? true
+                        : false
+                    }
+                  />
+                  <Form.Check
+                    inline
+                    type="checkbox"
+                    label="المستشار البحري"
+                    checked={checkedState[12]}
+                    onChange={() => handleOnChange(12)}
+                    disabled={
+                      userInfo.department === "المدير العام" ||
+                      userInfo.department === "نائب المدير العام"
                         ? true
                         : false
                     }
@@ -402,21 +466,21 @@ const DailyScreen = () => {
           </div>
           <div>
             <Button
-              variant='danger'
-              style={{ margin: '10px' }}
+              variant="danger"
+              style={{ margin: "10px" }}
               onClick={handleClose}
             >
               غلق
             </Button>
             <Button
-              type='submit'
-              variant='success'
+              type="submit"
+              variant="success"
               onClick={() => {
                 handleClose();
                 postLog(
                   userInfo.name,
-                  'إرسال مكاتبة',
-                  selectedFile.orgname + ' ' + selectedFile.file_no
+                  "إرسال مكاتبة",
+                  selectedFile.orgname + " " + selectedFile.file_no
                 );
                 removeDoc(selectedFile.file_no, userInfo.dep_id);
               }}
@@ -433,15 +497,15 @@ const DailyScreen = () => {
             <Modal.Title>رسالة تأكيد</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {'هل أنت متـأكد من حذف' +
-              ' - ' +
+            {"هل أنت متـأكد من حذف" +
+              " - " +
               selectedFile.orgname +
-              ' - ' +
+              " - " +
               selectedFile.file_no}
           </Modal.Body>
           <Modal.Footer>
             <Button
-              variant='danger'
+              variant="danger"
               onClick={() => {
                 handleConfirmClose();
               }}
@@ -449,14 +513,14 @@ const DailyScreen = () => {
               غلق
             </Button>
             <Button
-              variant='success'
+              variant="success"
               onClick={() => {
                 removeDoc(selectedFile.file_no, selectedFile.dep_id);
 
                 postLog(
                   userInfo.name,
-                  'اضافة مكاتبة',
-                  selectedFile.orgname + ' ' + selectedFile.file_no
+                  "اضافة مكاتبة",
+                  selectedFile.orgname + " " + selectedFile.file_no
                 );
 
                 handleConfirmClose();
