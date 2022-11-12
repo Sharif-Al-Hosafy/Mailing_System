@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Modal,
@@ -30,7 +29,6 @@ const DailyScreen = () => {
   const [checkedState, setCheckedState] = useState(new Array(13).fill(false));
   const [selectedFile, setSelectedFile] = useState();
   //other hooks
-  let navigate = useNavigate();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   //methods
@@ -69,6 +67,7 @@ const DailyScreen = () => {
   };
 
   const submitHandler = (e) => {
+    e.preventDefault();
     axios
       .post("/api/v1/files/send", {
         checkedState,
@@ -255,7 +254,10 @@ const DailyScreen = () => {
                                   "عرض مكاتبة",
                                   el.orgname + " " + el.file_no
                                 );
-                                navigate(`/doc`);
+                                window.open(
+                                  //change this
+                                  "http://localhost:5000/api/v1/files/viewer"
+                                );
                               }}
                             >
                               عرض
@@ -292,15 +294,9 @@ const DailyScreen = () => {
                     inline
                     type="checkbox"
                     label="المدير العام"
-                    style={{ marginRight: "59px" }}
+                    style={{ marginRight: "63px" }}
                     checked={checkedState[1]}
                     onChange={() => handleOnChange(1)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                   <Form.Check
                     inline
@@ -308,12 +304,6 @@ const DailyScreen = () => {
                     label="نائب المدير العام"
                     checked={checkedState[2]}
                     onChange={() => handleOnChange(2)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                 </div>
                 <div>
@@ -321,14 +311,9 @@ const DailyScreen = () => {
                     inline
                     type="checkbox"
                     label="سكرتير المدير العام"
-                    style={{ marginRight: "0 px" }}
+                    style={{ marginRight: "16px" }}
                     checked={checkedState[3]}
                     onChange={() => handleOnChange(3)}
-                    disabled={
-                      userInfo.department === "سكرتير المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                   <Form.Check
                     inline
@@ -336,12 +321,6 @@ const DailyScreen = () => {
                     label="الأرشيف العام"
                     checked={checkedState[4]}
                     onChange={() => handleOnChange(4)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                 </div>
                 <div>
@@ -349,15 +328,9 @@ const DailyScreen = () => {
                     inline
                     type="checkbox"
                     label="الإدارة القانونية"
-                    style={{ marginRight: "38px" }}
+                    style={{ marginRight: "42px" }}
                     checked={checkedState[5]}
                     onChange={() => handleOnChange(5)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                   <Form.Check
                     inline
@@ -365,12 +338,6 @@ const DailyScreen = () => {
                     label="إدارة التخطيط و المتابعة / الإدارة الفنية"
                     checked={checkedState[6]}
                     onChange={() => handleOnChange(6)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                 </div>
                 <div>
@@ -378,15 +345,9 @@ const DailyScreen = () => {
                     inline
                     type="checkbox"
                     label="الإدارة المالية"
-                    style={{ marginRight: "50px" }}
+                    style={{ marginRight: "54px" }}
                     checked={checkedState[7]}
                     onChange={() => handleOnChange(7)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                   <Form.Check
                     inline
@@ -394,12 +355,6 @@ const DailyScreen = () => {
                     label="إدارة العقود"
                     checked={checkedState[8]}
                     onChange={() => handleOnChange(8)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                 </div>
                 <div>
@@ -407,15 +362,9 @@ const DailyScreen = () => {
                     inline
                     type="checkbox"
                     label="إدارة الأمن"
-                    style={{ marginRight: "67px" }}
+                    style={{ marginRight: "71px" }}
                     checked={checkedState[9]}
                     onChange={() => handleOnChange(9)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                   <Form.Check
                     inline
@@ -423,12 +372,6 @@ const DailyScreen = () => {
                     label="الشئون الإدارية"
                     checked={checkedState[10]}
                     onChange={() => handleOnChange(10)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                 </div>
 
@@ -437,15 +380,9 @@ const DailyScreen = () => {
                     inline
                     type="checkbox"
                     label="إدارة التسويق"
-                    style={{ marginRight: "46px" }}
+                    style={{ marginRight: "50px" }}
                     checked={checkedState[11]}
                     onChange={() => handleOnChange(11)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                   <Form.Check
                     inline
@@ -453,12 +390,6 @@ const DailyScreen = () => {
                     label="المستشار البحري"
                     checked={checkedState[12]}
                     onChange={() => handleOnChange(12)}
-                    disabled={
-                      userInfo.department === "المدير العام" ||
-                      userInfo.department === "نائب المدير العام"
-                        ? true
-                        : false
-                    }
                   />
                 </div>
               </Form.Group>
